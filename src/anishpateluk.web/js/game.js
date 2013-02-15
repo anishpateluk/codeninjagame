@@ -37,7 +37,7 @@
 
             codeNinjaImg.onload = game.handleImageLoad;
             codeNinjaImg.onerror = game.handleImageError;
-            codeNinjaImg.src = "/img/game_assets/cn_ss_32b.png";
+            codeNinjaImg.src = "/img/game_assets/CN_master.png";
         } catch(e) {
             console.log(e);
         } 
@@ -59,43 +59,56 @@
         var verticalOffset = 26;
         var direction = 90;
         var spriteSheet;
+        var currentAnimation;
         
         // public properties
         self.animation = self.animation || {};
 
         // public methods
-        self.moveLeft = function() {
+        self.moveLeft = function () {
             if (direction != -90) direction = -90;
-            self.animation.gotoAndPlay("run_h");
+            playAnimation("run_h");
             if (self.animation.x > horizontalOffset) self.animation.x -= velocity;
         };
         
         self.moveRight = function () {
             if (direction != 90) direction = 90;
-            self.animation.gotoAndPlay("run");
+            playAnimation("run");
             if (self.animation.x <= gameWidth - horizontalOffset) self.animation.x += velocity;
         };
 
         self.moveUp = function () {
-            if (direction == 90) self.animation.gotoAndPlay("run");
-            else self.animation.gotoAndPlay("run_h");
+            if (direction == 90) playAnimation("run");
+            else playAnimation("run_h");
             if (self.animation.y >= (gameHeight / 2) - verticalOffset) self.animation.y -= velocity;
         };
 
         self.moveDown = function () {
-            if (direction == 90) self.animation.gotoAndPlay("run");
-            else self.animation.gotoAndPlay("run_h");
+            if (direction == 90) playAnimation("run");
+            else playAnimation("run_h");
             if (self.animation.y <= gameHeight - verticalOffset) self.animation.y += velocity;
         };
 
         self.idle = function () {
             if (direction == 90) {
-                self.animation.gotoAndPlay("idle");
+                playAnimation("idle");
                 return;
             }
-            self.animation.gotoAndPlay("idle_h");
+            playAnimation("idle_h");
         };
-        
+
+        function stopCurrentAnimation() {
+            self.animation.gotoAndStop(currentAnimation);
+        }
+
+        function playAnimation(animationName) {
+            if (animationName != currentAnimation) {
+                stopCurrentAnimation();
+                currentAnimation = animationName;
+                self.animation.gotoAndPlay(animationName);
+            } 
+        }
+
         // setup spritesheet
         function constructSpriteSheet() {
             spriteSheet = new createjs.SpriteSheet({
@@ -111,12 +124,11 @@
 
                 animations: {
                     idle: {
-                        frames: [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 15, 16, 17, 18, 19, 20, 21, 15, 16, 17, 18, 19, 20, 21],
-                        next: "idle",
-                        frequency: 2
+                        frames: [0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20],
+                        frequency: 11
                     },
                     run: {
-                        frames: [22, 23, 24, 25, 26, 27, 28, 29],
+                        frames: [21, 22, 23, 24, 25, 26, 27, 28],
                         next: "run",
                         frequency: 7
                     }
