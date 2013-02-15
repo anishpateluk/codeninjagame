@@ -54,6 +54,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -116,6 +119,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -136,8 +140,8 @@
     <Content Include="img\game_assets\cn_static.png" />
     <Content Include="img\game_assets\test_bg.png" />
     <Content Include="js\game.js" />
-    <Content Include="js\vendor\easeljs-0.6.0.min.js" />
-    <Content Include="js\vendor\jquery-1.9.1.min.js" />
+    <Content Include="js\vendor\easeljs-0.6.0.js" />
+    <Content Include="js\vendor\jquery-1.9.1.js" />
     <Content Include="js\vendor\jquery.hotkeys.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
