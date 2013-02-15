@@ -124,6 +124,8 @@
     <Content Include="img\game_assets\cn_idle.png" />
     <Content Include="img\game_assets\cn_run.png" />
     <Content Include="img\game_assets\cn_smoke.png" />
+    <Content Include="img\game_assets\cn_ss_32b.png" />
+    <Content Include="img\game_assets\cn_ss_8b.png" />
     <Content Include="img\game_assets\cn_static.png" />
     <Content Include="img\game_assets\test_bg.png" />
     <Content Include="js\game.js" />
