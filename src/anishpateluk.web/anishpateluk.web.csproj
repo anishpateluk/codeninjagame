@@ -153,6 +153,7 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\veeble.vps.web.pubxml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Game.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
