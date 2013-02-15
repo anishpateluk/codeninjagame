@@ -122,6 +122,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
     <Content Include="img\game_assets\cn_idle.png" />
+    <Content Include="img\game_assets\CN_master.png" />
     <Content Include="img\game_assets\cn_run.png" />
     <Content Include="img\game_assets\cn_smoke.png" />
     <Content Include="img\game_assets\cn_ss_32b.png" />
