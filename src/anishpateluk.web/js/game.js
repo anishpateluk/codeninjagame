@@ -98,13 +98,9 @@
             playAnimation("idle_h");
         };
 
-        function stopCurrentAnimation() {
-            self.animation.gotoAndStop(currentAnimation);
-        }
-
         function playAnimation(animationName) {
             if (animationName != currentAnimation) {
-                stopCurrentAnimation();
+                self.animation.gotoAndStop(currentAnimation);
                 currentAnimation = animationName;
                 self.animation.gotoAndPlay(animationName);
             } 
@@ -130,7 +126,6 @@
                     },
                     run: {
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
-                        next: "run",
                         frequency: 7
                     }
                 }
