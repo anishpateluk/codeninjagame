@@ -57,6 +57,7 @@
         var velocity = 2;
         var horizontalOffset = 16;
         var verticalOffset = 26;
+        var offset = 100;
         var direction = 90;
         var spriteSheet;
         var currentAnimation;
@@ -68,25 +69,25 @@
         self.moveLeft = function () {
             if (direction != -90) direction = -90;
             playAnimation("run_h");
-            if (self.animation.x > horizontalOffset) self.animation.x -= velocity;
+            if (self.animation.x >= offset) self.animation.x -= velocity;
         };
         
         self.moveRight = function () {
             if (direction != 90) direction = 90;
             playAnimation("run");
-            if (self.animation.x <= gameWidth - horizontalOffset) self.animation.x += velocity;
+            if (self.animation.x <= gameWidth - offset) self.animation.x += velocity;
         };
 
         self.moveUp = function () {
             if (direction == 90) playAnimation("run");
             else playAnimation("run_h");
-            if (self.animation.y >= (gameHeight / 2) - verticalOffset) self.animation.y -= velocity;
+            if (self.animation.y >= offset) self.animation.y -= velocity;
         };
 
         self.moveDown = function () {
             if (direction == 90) playAnimation("run");
             else playAnimation("run_h");
-            if (self.animation.y <= gameHeight - verticalOffset) self.animation.y += velocity;
+            if (self.animation.y <= gameHeight - offset) self.animation.y += velocity;
         };
 
         self.idle = function () {
@@ -170,7 +171,7 @@
         gameHeight = canvas.height;
         
         // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: (gameHeight / 2) + 10 });
+        player = new codeNinja({ x: gameWidth / 2, y: gameHeight / 2 });
 
         //add player to stage
         stage.addChild(player.animation);
