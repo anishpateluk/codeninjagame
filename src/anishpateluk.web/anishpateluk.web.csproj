@@ -143,6 +143,7 @@
     <Content Include="js\vendor\easeljs-0.6.0.js" />
     <Content Include="js\vendor\jquery-1.9.1.js" />
     <Content Include="js\vendor\jquery.hotkeys.js" />
+    <Content Include="sounds\vn.mp3" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
