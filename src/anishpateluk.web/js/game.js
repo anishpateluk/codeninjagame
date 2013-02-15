@@ -18,9 +18,15 @@
         handleImageLoad: function() {
             $(game).trigger("imagesLoaded");
         },
-        resizeCanvas : function() {
+        resizeCanvas: function() {
             canvas.width = window.innerWidth;
             canvas.height = 500;
+        },
+        playBgMusic: function() {
+            var bgMusic =  window.gameBgMusic = new Audio();
+            bgMusic.src = "/sounds/vn.mp3";
+            bgMusic.play();
+            bgMusic.volume = 0.1;
         }
     };
 
@@ -31,6 +37,7 @@
             $(game).on("imagesLoaded", function () {
                 game.resizeCanvas();
                 startGame();
+                game.playBgMusic();
             });
             
             canvas = document.getElementById("game");
@@ -38,6 +45,7 @@
             codeNinjaImg.onload = game.handleImageLoad;
             codeNinjaImg.onerror = game.handleImageError;
             codeNinjaImg.src = "/img/game_assets/CN_master.png";
+
         } catch(e) {
             console.log(e);
         } 
