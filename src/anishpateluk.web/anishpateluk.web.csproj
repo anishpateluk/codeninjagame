@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -120,6 +121,15 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
+    <Content Include="img\game_assets\cn_idle.png" />
+    <Content Include="img\game_assets\cn_run.png" />
+    <Content Include="img\game_assets\cn_smoke.png" />
+    <Content Include="img\game_assets\cn_static.png" />
+    <Content Include="img\game_assets\test_bg.png" />
+    <Content Include="js\game.js" />
+    <Content Include="js\vendor\easeljs-0.6.0.min.js" />
+    <Content Include="js\vendor\jquery-1.9.1.min.js" />
+    <Content Include="js\vendor\jquery.hotkeys.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -131,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="css\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\veeble.vps.web.pubxml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
