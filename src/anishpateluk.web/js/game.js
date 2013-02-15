@@ -5,21 +5,10 @@
     var framesPerSecond = 60;
     var canvas, stage, player, gameWidth, gameHeight;
     
-    // Sprite images
-    var loadedImages = 0;
-    var totalImages = 3;
-
-    var codeNinjaIdleImg = new Image();
-    codeNinjaIdleImg.height = 100;
-    codeNinjaIdleImg.width = 700;
-
-    var codeNinjaSmokeImg = new Image();
-    codeNinjaSmokeImg.height = 200;
-    codeNinjaSmokeImg.width = 800;
-
-    var codeNinjaRunImg = new Image();
-    codeNinjaRunImg.height = 100;
-    codeNinjaRunImg.width = 800;
+    // sprite sheet image
+    var codeNinjaImg = new Image();
+    codeNinjaImg.height = 100;
+    codeNinjaImg.width = 2900;
 
     // game functions
     var game = {
@@ -27,11 +16,7 @@
             throw new Error("Error Loading Image : " + e.target.src);
         },
         handleImageLoad: function() {
-            loadedImages++;
-
-            if (loadedImages == totalImages) {
-                $(game).trigger("imagesLoaded");
-            }
+            $(game).trigger("imagesLoaded");
         },
         resizeCanvas : function() {
             canvas.width = window.innerWidth;
@@ -50,28 +35,25 @@
             
             canvas = document.getElementById("game");
 
-            codeNinjaIdleImg.onload = game.handleImageLoad;
-            codeNinjaIdleImg.onerror = game.handleImageError;
-            codeNinjaIdleImg.src = "/img/game_assets/cn_idle.png";
-
-            codeNinjaSmokeImg.onload = game.handleImageLoad;
-            codeNinjaSmokeImg.onerror = game.handleImageError;
-            codeNinjaSmokeImg.src = "/img/game_assets/cn_smoke.png";
-
-            codeNinjaRunImg.onload = game.handleImageLoad;
-            codeNinjaRunImg.onerror = game.handleImageError;
-            codeNinjaRunImg.src = "/img/game_assets/cn_run.png";
+            codeNinjaImg.onload = game.handleImageLoad;
+            codeNinjaImg.onerror = game.handleImageError;
+            codeNinjaImg.src = "/img/game_assets/cn_ss_32b.png";
         } catch(e) {
             console.log(e);
         } 
     }
     
     // code ninja class
-    var codeNinja = function (startPos) {
+    var codeNinja = function (options) {
         var self = this;
-        var startPosition = startPos || { x: 0, y: 0 };
 
         // private fields
+        var defaultOptions = {
+            x: 0,
+            y: 0,
+            complexFrames: false
+        };
+        var settings = $.extend(defaultOptions, options);
         var velocity = 2;
         var horizontalOffset = 16;
         var verticalOffset = 26;
@@ -117,49 +99,15 @@
         // setup spritesheet
         function constructSpriteSheet() {
             spriteSheet = new createjs.SpriteSheet({
-                images: [
-                    codeNinjaIdleImg,
-                    codeNinjaSmokeImg,
-                    codeNinjaRunImg
-                ],
+                images: [codeNinjaImg],
 
-                // x, y, width, height, imageIndex
-                frames: [
-                    // idle animation frames
-                    [0, 0, 100, 100, 1], // 1
-                    [100, 0, 100, 100, 1], // 2
-                    [200, 0, 100, 100, 1], // 3
-                    [300, 0, 100, 100, 1], // 4
-                    [400, 0, 100, 100, 1], // 5
-                    [500, 0, 100, 100, 1], // 6
-                    [600, 0, 100, 100, 1], // 7
-
-                    // smoke animation frames
-                    [0, 0, 100, 100, 2], // 8 (1)
-                    [100, 0, 100, 100, 2], // 9 (2)
-                    [200, 0, 100, 100, 2], // 10 (3)
-                    [300, 0, 100, 100, 2], // 11 (4)
-                    [400, 0, 100, 100, 2], // 12 (5)
-                    [500, 0, 100, 100, 2], // 13 (6)
-                    [600, 0, 100, 100, 2], // 14 (7)
-                    [700, 0, 100, 100, 2], // 15 (8)
-                    [0, 100, 100, 100, 2], // 16 (9)
-                    [100, 100, 100, 100, 2], // 17 (10)
-                    [200, 100, 100, 100, 2], // 18 (11)
-                    [300, 100, 100, 100, 2], // 19 (12)
-                    [400, 100, 100, 100, 2], // 20 (13)
-                    [500, 100, 100, 100, 2], // 21 (14)
-
-                    // run animation frames
-                    [0, 0, 100, 100, 3], // 22 (1)
-                    [100, 0, 100, 100, 3], // 23 (2)
-                    [200, 0, 100, 100, 3], // 24 (3)
-                    [300, 0, 100, 100, 3], // 25 (4)
-                    [400, 0, 100, 100, 3], // 26 (5)
-                    [500, 0, 100, 100, 3], // 27 (6)
-                    [600, 0, 100, 100, 3], // 28 (7)
-                    [700, 0, 100, 100, 3] // 29 (8)
-                ],
+                frames: {
+                    width: 100,
+                    height: 100,
+                    count: 29,
+                    regX: 50,
+                    regY: 50
+                },
 
                 animations: {
                     idle: {
@@ -191,8 +139,8 @@
             self.animation.regY = self.animation.spriteSheet.frameHeight / 2 | 0;
             
             // set start position
-            self.animation.x = startPosition.x;
-            self.animation.y = startPosition.y;
+            self.animation.x = settings.x;
+            self.animation.y = settings.y;
         }
 
         constructSpriteSheet();
