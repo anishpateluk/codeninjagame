@@ -17,7 +17,7 @@
   position: relative;
   padding: 0;
 }
-#mobile-controls div {
+#mobile-controls button {
   background: no-repeat;
   -moz-background-origin: content-box;
   -webkit-background-origin: content-box;
@@ -32,9 +32,9 @@
   height: 100px;
   border: thin solid black;
 }
-#mobile-controls div:hover,
-#mobile-controls div:focus,
-#mobile-controls div:focus {
+#mobile-controls button:hover,
+#mobile-controls button:focus,
+#mobile-controls button:active {
   background-color: azure;
 }
 #mobile-controls #left-key {
