@@ -215,24 +215,30 @@
         window.keydown = {};
         
         if (window.isMobile) {
-            $("#left-key").on("touchstart", function () {
+            $("#left-key").on("touchstart", function (e) {
+                e.preventDefault();
                 keydown.left = true;
             });
-            $("#left-key").on("touchend", function () {
+            $("#left-key").on("touchend", function (e) {
+                e.preventDefault();
                 keydown.left = false;
             });
 
-            $("#right-key").on("touchstart", function () {
+            $("#right-key").on("touchstart", function (e) {
+                e.preventDefault();
                 keydown.right = true;
             });
-            $("#right-key").on("touchend", function () {
+            $("#right-key").on("touchend", function (e) {
+                e.preventDefault();
                 keydown.right = false;
             });
 
-            $("#space-key").on("touchstart", function () {
+            $("#space-key").on("touchstart", function (e) {
+                e.preventDefault();
                 keydown.space = true;
             });
-            $("#space-key").on("touchend", function () {
+            $("#space-key").on("touchend", function (e) {
+                e.preventDefault();
                 keydown.space = false;
             });
             return;
