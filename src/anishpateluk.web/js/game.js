@@ -40,7 +40,7 @@
             $(game).on("imagesLoaded", function () {
                 game.resizeCanvas();
                 startGame();
-                game.playBgMusic();
+                //game.playBgMusic();
             });
             
             canvas = document.getElementById("game");
