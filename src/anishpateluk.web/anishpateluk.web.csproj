@@ -128,6 +128,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Helpers\HtmlHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -138,6 +139,9 @@
     <Content Include="Global.asax" />
     <Content Include="GameAssets\images\cn_master.png" />
     <Content Include="GameAssets\images\cn_static.png" />
+    <Content Include="img\glyphs\left_arrow.png" />
+    <Content Include="img\glyphs\right_arrow.png" />
+    <Content Include="img\glyphs\axe.png" />
     <Content Include="js\game.js" />
     <Content Include="js\vendor\easeljs-0.6.0.js" />
     <Content Include="js\vendor\jquery-1.9.1.js" />
@@ -155,7 +159,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="css\" />
-    <Folder Include="img\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
