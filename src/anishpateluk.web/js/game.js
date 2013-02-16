@@ -151,7 +151,7 @@
                     },
                     attack: {
                         frames: [29, 30, 31, 32, 33, 34],
-                        frequency: 7
+                        frequency: 9
                     }
                 }
             });
