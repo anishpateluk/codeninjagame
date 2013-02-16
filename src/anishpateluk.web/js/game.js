@@ -8,7 +8,7 @@
     // sprite sheet image
     var codeNinjaImg = new Image();
     codeNinjaImg.height = 100;
-    codeNinjaImg.width = 2900;
+    codeNinjaImg.width = 3600;
 
     // game functions
     var game = {
@@ -23,10 +23,13 @@
             canvas.height = 500;
         },
         playBgMusic: function() {
-            var bgMusic =  window.gameBgMusic = new Audio();
-            bgMusic.src = "/sounds/vn.mp3";
-            bgMusic.play();
-            bgMusic.volume = 0.1;
+            var audio = window.gameAudio = new Audio();
+            audio.src = "/sounds/vn.mp3";
+            audio.addEventListener("ended", function() {
+                audio.play();
+            });
+            audio.play();
+            audio.volume = 0.1;
         }
     };
 
@@ -63,17 +66,21 @@
         };
         var settings = $.extend(defaultOptions, options);
         var velocity = 2;
-        var horizontalOffset = 16;
-        var verticalOffset = 26;
         var offset = 100;
         var direction = 90;
         var spriteSheet;
         var currentAnimation;
+        var canPlayAnimation = window.canPlayAnimation = true;
         
         // public properties
         self.animation = self.animation || {};
 
         // public methods
+        self.attack = function() {
+            if (direction == 90) playAnimation("attack");
+            else playAnimation("attack_h");
+        };
+
         self.moveLeft = function () {
             if (direction != -90) direction = -90;
             playAnimation("run_h");
@@ -99,19 +106,25 @@
         };
 
         self.idle = function () {
-            if (direction == 90) {
-                playAnimation("idle");
-                return;
-            }
-            playAnimation("idle_h");
+            if (direction == 90) playAnimation("idle");
+            else playAnimation("idle_h");
         };
 
         function playAnimation(animationName) {
-            if (animationName != currentAnimation) {
+            var isAttack = animationName.indexOf("attack") != -1;
+            if (isAttack) {
+                canPlayAnimation = false;
+                self.animation.onAnimationEnd = function() {
+                    self.animation.onAnimationEnd = null;
+                    canPlayAnimation = true;
+                };
+            }
+            if ((isAttack && animationName != currentAnimation)
+                || (!isAttack && canPlayAnimation && animationName != currentAnimation)) {
                 self.animation.gotoAndStop(currentAnimation);
                 currentAnimation = animationName;
                 self.animation.gotoAndPlay(animationName);
-            } 
+            }
         }
 
         // setup spritesheet
@@ -122,7 +135,7 @@
                 frames: {
                     width: 100,
                     height: 100,
-                    count: 29,
+                    count: 35,
                     regX: 50,
                     regY: 50
                 },
@@ -134,6 +147,10 @@
                     },
                     run: {
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
+                        frequency: 7
+                    },
+                    attack: {
+                        frames: [29, 30, 31, 32, 33, 34],
                         frequency: 7
                     }
                 }
@@ -188,16 +205,18 @@
     // game loop
     window.tick = function tick() {
 
-        if (keydown.left) player.moveLeft();
+        if (canPlayAnimation && keydown.left) player.moveLeft();
 
-        if (keydown.right) player.moveRight();
+        if (canPlayAnimation && keydown.right) player.moveRight();
 
-        if (keydown.up) player.moveUp();
+        if (canPlayAnimation && keydown.up) player.moveUp();
 
-        if (keydown.down) player.moveDown();
+        if (canPlayAnimation && keydown.down) player.moveDown();
+        
+        if (canPlayAnimation && !keydown.up && !keydown.down && !keydown.left && !keydown.right && !keydown.space) player.idle();
 
-        if (!keydown.up && !keydown.down && !keydown.left && !keydown.right) player.idle();
-
+        if (keydown.space) player.attack();
+        
         // update stage
         stage.update();
     };
