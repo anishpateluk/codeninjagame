@@ -3,7 +3,8 @@
     
     //globals
     var framesPerSecond = 60;
-    var canvas, stage, player, gameWidth, gameHeight;
+    var canvas, stage, player, gameWidth;
+    var gameHeight = window.isMobile ? 300 : 500;
     
     // sprite sheet image
     var codeNinjaImg = new Image();
@@ -20,7 +21,7 @@
         },
         resizeCanvas: function() {
             canvas.width = window.innerWidth;
-            canvas.height = 500;
+            canvas.height = gameHeight;
         },
         playBgMusic: function() {
             var audio = window.gameAudio = new Audio();
@@ -43,7 +44,7 @@
                 //game.playBgMusic();
             });
             
-            canvas = document.getElementById("game");
+            canvas = document.getElementById("game-canvas");
 
             codeNinjaImg.onload = game.handleImageLoad;
             codeNinjaImg.onerror = game.handleImageError;
@@ -94,17 +95,9 @@
         };
 
         self.moveUp = function () {
-            if (direction == 90) playAnimation("run");
-            else playAnimation("run_h");
-            if (self.animation.y >= offset) self.animation.y -= velocity;
+            // jump
         };
-
-        self.moveDown = function () {
-            if (direction == 90) playAnimation("run");
-            else playAnimation("run_h");
-            if (self.animation.y <= gameHeight - offset) self.animation.y += velocity;
-        };
-
+        
         self.idle = function () {
             if (direction == 90) playAnimation("idle");
             else playAnimation("idle_h");
@@ -208,12 +201,8 @@
         if (canPlayAnimation && keydown.left) player.moveLeft();
 
         if (canPlayAnimation && keydown.right) player.moveRight();
-
-        if (canPlayAnimation && keydown.up) player.moveUp();
-
-        if (canPlayAnimation && keydown.down) player.moveDown();
         
-        if (canPlayAnimation && !keydown.up && !keydown.down && !keydown.left && !keydown.right && !keydown.space) player.idle();
+        if (canPlayAnimation && !keydown.up && !keydown.left && !keydown.right && !keydown.space) player.idle();
 
         if (keydown.space) player.attack();
         
@@ -224,6 +213,30 @@
     // register key key presses
     $(function () {
         window.keydown = {};
+        
+        if (window.isMobile) {
+            $("#left-key").on("touchstart", function () {
+                keydown.left = true;
+            });
+            $("#left-key").on("touchend", function () {
+                keydown.left = false;
+            });
+
+            $("#right-key").on("touchstart", function () {
+                keydown.right = true;
+            });
+            $("#right-key").on("touchend", function () {
+                keydown.right = false;
+            });
+
+            $("#space-key").on("touchstart", function () {
+                keydown.space = true;
+            });
+            $("#space-key").on("touchend", function () {
+                keydown.space = false;
+            });
+            return;
+        }
 
         function keyName(event) {
             return jQuery.hotkeys.specialKeys[event.which] ||

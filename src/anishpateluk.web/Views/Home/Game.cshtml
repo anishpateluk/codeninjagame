@@ -1,6 +1,10 @@
 ﻿@using anishpateluk.web.Helpers
+
+@model bool
+
 @{
     Layout = null;
+    var isMobile = Model;
 }
 
 <!DOCTYPE html>
@@ -15,25 +19,77 @@
             padding: 0;
             margin: 0;
         }
-        #game {
-            background: whitesmoke;
+        #game-wrapper {
+            padding: 0;
             display: block;
             margin: 5% auto 0px;
+        }
+        #game {
+            background: whitesmoke;
         }
         #info {
             text-align: center; 
         }
+        #mobile-controls {
+            position: relative;
+            padding: 0;
+        }
+        #left-key {
+            background-color: cadetblue;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+        }
+        #right-key {
+            background-color: cadetblue;
+            position: absolute;
+            top: 0;
+            left: 110px;
+            width: 100px;
+            height: 100px;
+        }
+        #space-key {
+            background-color: cadetblue;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+        }
     </style>
+    
+    <script type="text/javascript">
+        window.isMobile = @(isMobile ? "true" : "false");
+    </script>
 </head>
     <body>
         
-        <canvas id="game">
-        
-        </canvas>
-
-        <div id="info">
-            <small>arrow keys to move, spacebar to attack</small>
+        <div id="game-wrapper">
+            <canvas id="game-canvas"></canvas>
+            @if (isMobile)
+            {
+                <div id="mobile-controls">
+                    <div id="left-key">
+                        <img src="/img/glyphs/left_arrow.png" width="100" height="100"/>
+                    </div>
+                    <div id="right-key">
+                        <img src="/img/glyphs/right_arrow.png" width="100" height="100"/>
+                    </div>
+                    <div id="space-key">
+                        <img src="/img/glyphs/axe.png" width="100" height="100"/>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div id="info">
+                    <small>left and right arrow keys to move, spacebar to attack</small>
+                </div>
+            }
         </div>
+
         @if (Html.IsDebug())
         {
             <script src="~/js/vendor/jquery-1.9.1.js"></script>
