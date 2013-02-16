@@ -114,10 +114,10 @@
             var isAttack = animationName.indexOf("attack") != -1;
             if (isAttack) {
                 canPlayAnimation = false;
-                self.animation.onAnimationEnd = function() {
-                    self.animation.onAnimationEnd = null;
+                self.animation.addEventListener("animationend", function () {
+                    self.animation.removeAllEventListeners("animationend");
                     canPlayAnimation = true;
-                };
+                });
             }
             if ((isAttack && animationName != currentAnimation)
                 || (!isAttack && canPlayAnimation && animationName != currentAnimation)) {
