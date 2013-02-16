@@ -136,13 +136,13 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <Content Include="img\game_assets\CN_master.png" />
-    <Content Include="img\game_assets\cn_static.png" />
+    <Content Include="GameAssets\images\cn_master.png" />
+    <Content Include="GameAssets\images\cn_static.png" />
     <Content Include="js\game.js" />
     <Content Include="js\vendor\easeljs-0.6.0.js" />
     <Content Include="js\vendor\jquery-1.9.1.js" />
     <Content Include="js\vendor\jquery.hotkeys.js" />
-    <Content Include="sounds\vn.mp3" />
+    <Content Include="GameAssets\sounds\vn.mp3" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -155,6 +155,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="css\" />
+    <Folder Include="img\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

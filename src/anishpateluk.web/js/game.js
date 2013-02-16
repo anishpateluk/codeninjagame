@@ -24,7 +24,7 @@
         },
         playBgMusic: function() {
             var audio = window.gameAudio = new Audio();
-            audio.src = "/sounds/vn.mp3";
+            audio.src = "/GameAssets/sounds/vn.mp3";
             audio.addEventListener("ended", function() {
                 audio.play();
             });
@@ -47,7 +47,7 @@
 
             codeNinjaImg.onload = game.handleImageLoad;
             codeNinjaImg.onerror = game.handleImageError;
-            codeNinjaImg.src = "/img/game_assets/CN_master.png";
+            codeNinjaImg.src = "/GameAssets/images/cn_master.png";
 
         } catch(e) {
             console.log(e);
