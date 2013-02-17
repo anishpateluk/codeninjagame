@@ -4,7 +4,7 @@
     //globals
     var framesPerSecond = 60;
     var canvas, stage, player, gameWidth;
-    var gameHeight = window.isMobile ? 300 : 500;
+    var gameHeight = 200;
     
     // sprite sheet image
     var codeNinjaImg = new Image();
@@ -67,7 +67,7 @@
         };
         var settings = $.extend(defaultOptions, options);
         var velocity = 2;
-        var offset = 100;
+        var offset = 50;
         var direction = 90;
         var spriteSheet;
         var currentAnimation;
@@ -184,7 +184,7 @@
         gameHeight = canvas.height;
         
         // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: gameHeight / 2 });
+        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 99 });
 
         //add player to stage
         stage.addChild(player.animation);
