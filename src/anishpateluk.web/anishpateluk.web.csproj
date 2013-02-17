@@ -144,6 +144,7 @@
     </Content>
     <Content Include="GameAssets\images\mario_dirt_tile.png" />
     <Content Include="GameAssets\images\mario_pipe_tile.png" />
+    <Content Include="GameAssets\images\mario_pipe_tile_2.png" />
     <Content Include="Global.asax" />
     <Content Include="GameAssets\images\cn_master.png" />
     <Content Include="GameAssets\images\cn_static.png" />
