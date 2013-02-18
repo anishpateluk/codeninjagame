@@ -63,7 +63,9 @@
         var defaultOptions = {
             x: 0,
             y: 0,
-            complexFrames: false
+            complexFrames: false,
+            scaleX: 1,
+            scaleY: 1
         };
         var settings = $.extend(defaultOptions, options);
         var velocity = 2;
@@ -164,6 +166,10 @@
             self.animation.regX = self.animation.spriteSheet.frameWidth / 2 | 0;
             self.animation.regY = self.animation.spriteSheet.frameHeight / 2 | 0;
             
+            //set scale
+            self.animation.scaleX = settings.scaleX;
+            self.animation.scaleY = settings.scaleY;
+            
             // set start position
             self.animation.x = settings.x;
             self.animation.y = settings.y;
@@ -184,7 +190,7 @@
         gameHeight = canvas.height;
         
         // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 99 });
+        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 73, scaleX: 0.5, scaleY: 0.5 });
 
         //add player to stage
         stage.addChild(player.animation);
