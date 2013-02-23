@@ -9,7 +9,7 @@
     // sprite sheet image
     var codeNinjaImg = new Image();
     codeNinjaImg.height = 100;
-    codeNinjaImg.width = 3600;
+    codeNinjaImg.width = 4500;
 
     // game functions
     var game = {
@@ -130,7 +130,7 @@
                 frames: {
                     width: 100,
                     height: 100,
-                    count: 35,
+                    count: 45,
                     regX: 50,
                     regY: 50
                 },
@@ -144,9 +144,17 @@
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
                         frequency: 7
                     },
-                    attack: {
+                    jump: {
                         frames: [29, 30, 31, 32, 33, 34],
                         frequency: 9
+                    },
+                    hit: {
+                        frames: [36, 35, 36],
+                        frequency: 9
+                    },
+                    attack: {
+                        frames: [37, 38, 39, 40, 41, 42, 43, 44],
+                        frequency: 7
                     }
                 }
             });
@@ -181,7 +189,7 @@
     };
     
     // game setup
-    function startGame() {
+    window.startGame = function startGame() {
         //set up stage
         stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
@@ -190,7 +198,7 @@
         gameHeight = canvas.height;
         
         // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 73 });
+        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 98 });
 
         //add player to stage
         stage.addChild(player.animation);
