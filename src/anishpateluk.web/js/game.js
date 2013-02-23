@@ -2,22 +2,32 @@
 (function(window, $, undefined) {
     
     //globals
-    var framesPerSecond = 60;
-    var canvas, stage, player, gameWidth;
-    var gameHeight = 200;
+    var framesPerSecond = 30;
+    var canvas, world, stage, player, gameWidth;
+    var gameHeight = 300;
+    var requestedAssets = 0;
+    var totalAssets = 2;
     
     // sprite sheet image
     var codeNinjaImg = new Image();
     codeNinjaImg.height = 100;
     codeNinjaImg.width = 4500;
+    
+    // block image
+    var blockImg = new Image();
+    blockImg.height = 50;
+    blockImg.width = 50;
 
     // game functions
-    var game = {
+    var game = window.game = {
         handleImageError: function(e) {
             throw new Error("Error Loading Image : " + e.target.src);
         },
-        handleImageLoad: function() {
-            $(game).trigger("imagesLoaded");
+        handleImageLoad: function(e) {
+            ++requestedAssets;
+            if (requestedAssets == totalAssets) {
+                $(game).trigger("imagesLoaded");
+            }
         },
         resizeCanvas: function() {
             canvas.width = window.innerWidth;
@@ -31,6 +41,80 @@
             });
             audio.play();
             audio.volume = 0.1;
+        },
+        calculateIntersection: function(rect1, rect2, x, y) {
+            x = x || 0;
+            y = y || 0;
+
+            var dx, dy, r1 = {}, r2 = {};
+
+            r1.cx = rect1.x + x + (r1.halfWidth = (rect1.width / 2));
+            r1.cy = rect1.y + y + (r1.halfHeight = (rect1.height / 2));
+            r2.cx = rect2.x + x + (r2.halfWidth = (rect2.width / 2));
+            r2.cy = rect2.y + y + (r2.halfHeight = (rect2.height / 2));
+
+            dx = Math.abs(r1.cx - r2.cx) - (r1.halfWidth + r2.halfWidth);
+            dy = Math.abs(r1.cy - r2.cy) - (r1.halfHeight + r2.halfHeight);
+
+            if (dx < 0 && dy < 0) {
+                return { width: -dx, height: -dy };
+            } else {
+                return null;
+            }
+        },
+        addPlatform: function(x, y) {
+            x = Math.round(x);
+            y = Math.round(y);
+
+            var platform = new createjs.Bitmap(blockImg);
+            platform.x = x;
+            platform.y = y;
+            platform.snapToPixel = true;
+
+            game.collideables.push(platform);
+            world.addChild(platform);
+        },
+        collideables: [],
+        getBounds: function(obj) {
+            var bounds = { x: Infinity, y: Infinity, width: 0, height: 0 };
+
+            if (obj instanceof createjs.Container) {
+                var children = object.children, l = children.length, cbounds, c;
+                for (c = 0; c < l; c++) {
+                    cbounds = getBounds(children[c]);
+                    if (cbounds.x < bounds.x) bounds.x = cbounds.x;
+                    if (cbounds.y < bounds.y) bounds.y = cbounds.y;
+                    if (cbounds.width > bounds.width) bounds.width = cbounds.width;
+                    if (cbounds.height > bounds.height) bounds.height = cbounds.height;
+                }
+            } else {
+                var gp, imgr;
+                if (obj instanceof createjs.Bitmap) {
+                    gp = obj.localToGlobal(0, 0);
+                    imgr = { width: obj.image.width, height: obj.image.height };
+                } else if (obj instanceof createjs.BitmapAnimation) {
+                    gp = obj.localToGlobal(0, 0);
+                    imgr = obj.spriteSheet._frames[obj.currentFrame];
+                } else {
+                    return bounds;
+                }
+
+                bounds.width = imgr.width * Math.abs(obj.scaleX);
+                if (obj.scaleX >= 0) {
+                    bounds.x = gp.x;
+                } else {
+                    bounds.x = gp.x - bounds.width;
+                }
+
+                bounds.height = imgr.height * Math.abs(obj.scaleY);
+                if (obj.scaleX >= 0) {
+                    bounds.y = gp.y;
+                } else {
+                    bounds.y = gp.y - bounds.height;
+                }
+            }
+
+            return bounds;
         }
     };
 
@@ -50,6 +134,10 @@
             codeNinjaImg.onerror = game.handleImageError;
             codeNinjaImg.src = "/GameAssets/images/cn_master.png";
 
+            blockImg.onload = game.handleImageLoad;
+            blockImg.onerror = game.handleImageError;
+            blockImg.src = "/GameAssets/images/mario_dirt_tile.png";
+
         } catch(e) {
             console.log(e);
         } 
@@ -68,12 +156,13 @@
             scaleY: 1
         };
         var settings = $.extend(defaultOptions, options);
-        var velocity = 2;
+        self.velocity = { x: 5, y: 25 };
         var offset = 50;
         var direction = 90;
         var spriteSheet;
         var currentAnimation;
         var canPlayAnimation = window.canPlayAnimation = true;
+        self.onGround = true;
         
         // public properties
         self.animation = self.animation || {};
@@ -87,17 +176,23 @@
         self.moveLeft = function () {
             if (direction != -90) direction = -90;
             playAnimation("run_h");
-            if (self.animation.x >= offset) self.animation.x -= velocity;
+            if (self.animation.x >= offset) self.animation.x -= self.velocity.x;
         };
         
         self.moveRight = function () {
             if (direction != 90) direction = 90;
             playAnimation("run");
-            if (self.animation.x <= gameWidth - offset) self.animation.x += velocity;
+            if (self.animation.x <= gameWidth - offset) self.animation.x += self.velocity.x;
         };
 
-        self.moveUp = function () {
-            // jump
+        self.jump = function () {
+            if (direction == 90) playAnimation("jump");
+            else playAnimation("jump_h");
+            
+            if (self.onGround) {
+                self.velocity.y = -100;
+                self.onGround = false;
+            }
         };
         
         self.idle = function () {
@@ -105,9 +200,69 @@
             else playAnimation("idle_h");
         };
 
+        self.tick = function() {
+            self.velocity.y += 1;
+
+            var c = 0,
+                cc = 0,
+                addY =  self.velocity.y,
+                bounds = game.getBounds(self.animation),
+                cbounds,
+                collision = null,
+                collideables = game.collideables;
+
+            bounds.height = 50;
+            bounds.width = 10;
+            cc = 0;
+            
+            // for each collideable object we will calculate the
+            // bounding-rectangle and then check for an intersection
+            // of the hero's future position's bounding-rectangle
+            while (!collision && cc < collideables.length) {
+                cbounds = game.getBounds(collideables[cc]);
+                if (collideables[cc].isVisible()) {
+                    collision = game.calculateIntersection(bounds, cbounds, 0, addY);
+                }
+
+                if (!collision && collideables[cc].isVisible()) {
+                    // if there was NO collision detected, but somehow
+                    // the hero got onto the "other side" of an object (high velocity e.g.),
+                    // then we will detect this here, and adjust the velocity according to
+                    // it to prevent the Hero from "ghosting" through objects
+                    // try messing with the 'this.velocity = {x:0,y:25};'
+                    // -> it should still collide even with very high values
+                    if ((bounds.y < cbounds.y && bounds.y + addY > cbounds.y)
+                      || (bounds.y > cbounds.y && bounds.y + addY < cbounds.y)) {
+                        addY = cbounds.y - bounds.y;
+                    } else {
+                        cc++;
+                    }
+                }
+            }
+            
+            // if no collision was to be found, just
+            //  move the hero to it's new position
+            if (!collision) {
+                self.animation.y += addY;
+                if (self.onGround) {
+                    self.onGround = false;
+                }
+                // else move the hero as far as possible
+                // and then make it stop and tell the
+                // game, that the hero is now "an the ground"
+            } else {
+                self.animation.y += addY - collision.height;
+                if (addY > 0) {
+                    self.onGround = true;
+                }
+                self.velocity.y = 0;
+            }
+        };
+
         function playAnimation(animationName) {
             var isAttack = animationName.indexOf("attack") != -1;
-            if (isAttack) {
+            var isJump = animationName.indexOf("jump") != -1;
+            if (isAttack || isJump) {
                 canPlayAnimation = false;
                 self.animation.addEventListener("animationend", function () {
                     self.animation.removeAllEventListeners("animationend");
@@ -115,7 +270,8 @@
                 });
             }
             if ((isAttack && animationName != currentAnimation)
-                || (!isAttack && canPlayAnimation && animationName != currentAnimation)) {
+                || (isJump && animationName != currentAnimation)
+                || (!isAttack && !isJump && canPlayAnimation && animationName != currentAnimation)) {
                 self.animation.gotoAndStop(currentAnimation);
                 currentAnimation = animationName;
                 self.animation.gotoAndPlay(animationName);
@@ -138,23 +294,23 @@
                 animations: {
                     idle: {
                         frames: [0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20],
-                        frequency: 11
+                        frequency: 5
                     },
                     run: {
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
-                        frequency: 7
+                        frequency: 4
                     },
                     jump: {
-                        frames: [29, 30, 31, 32, 33, 34],
-                        frequency: 9
+                        frames: [30, 31, 32],
+                        frequency: 6
                     },
                     hit: {
                         frames: [36, 35, 36],
-                        frequency: 9
+                        frequency: 3
                     },
                     attack: {
                         frames: [37, 38, 39, 40, 41, 42, 43, 44],
-                        frequency: 7
+                        frequency: 4
                     }
                 }
             });
@@ -190,24 +346,42 @@
     
     // game setup
     window.startGame = function startGame() {
-        //set up stage
+        // set up stage
         stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
+
+        // set up world
+        world = new createjs.Container();
+        stage.addChild(world);
 
         gameWidth = canvas.width;
         gameHeight = canvas.height;
         
-        // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 98 });
+        // add platforms
+        var halfWidth = gameWidth / 2;
+        for (var i = 0; i < gameWidth; i += 50) {
+            game.addPlatform(i, gameHeight - 50);
+            
 
-        //add player to stage
-        stage.addChild(player.animation);
+            if (i >= halfWidth) {
+                game.addPlatform(i, gameHeight - 100);
+                if (i >= halfWidth + 100) {
+                    game.addPlatform(i, gameHeight - 150);
+                }
+            }
+        }
+        
+        // set up player
+        player = window.player = new codeNinja({ x: 100, y: gameHeight - 99 });
+
+        //add player to world
+        world.addChild(player.animation);
 
         // easeljs boilerplate
         createjs.Ticker.addListener(window);
         createjs.Ticker.useRAF = true;
         createjs.Ticker.setFPS(framesPerSecond);
-    }
+    };
 
     // game loop
     window.tick = function tick() {
@@ -216,10 +390,14 @@
 
         if (canPlayAnimation && keydown.right) player.moveRight();
         
+        if (canPlayAnimation && keydown.up) player.jump();
+        
         if (canPlayAnimation && !keydown.up && !keydown.left && !keydown.right && !keydown.space) player.idle();
 
         if (keydown.space) player.attack();
-        
+
+        player.tick();
+
         // update stage
         stage.update();
     };

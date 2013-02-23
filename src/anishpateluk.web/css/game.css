@@ -9,12 +9,6 @@
 }
 #game-canvas {
   background-color: skyblue;
-  background-image: url(../GameAssets/images/mario_dirt_tile.png), url(../GameAssets/images/mario_pipe_tile.png), url(../GameAssets/images/mario_clouds_tile.png);
-  -moz-background-origin: content-box, content-box, content-box;
-  -webkit-background-origin: content-box, content-box, content-box;
-  background-origin: content-box, content-box, content-box;
-  background-repeat: repeat-x, repeat-x, repeat-x;
-  background-position: bottom, 0 96px, 0 0;
 }
 #info {
   text-align: center;
@@ -52,6 +46,10 @@
   background-image: url(../img/glyphs/right_arrow.png);
   top: 0;
   left: 110px;
+}
+#mobile-controls #up-key {
+  top: 0;
+  right: 110px;
 }
 #mobile-controls #space-key {
   background-image: url(../img/glyphs/axe.png);
