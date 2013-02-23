@@ -190,7 +190,7 @@
         gameHeight = canvas.height;
         
         // set up player
-        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 73, scaleX: 0.5, scaleY: 0.5 });
+        player = new codeNinja({ x: gameWidth / 2, y: gameHeight - 73 });
 
         //add player to stage
         stage.addChild(player.animation);
