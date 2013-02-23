@@ -148,6 +148,7 @@
     <Content Include="Global.asax" />
     <Content Include="GameAssets\images\cn_master.png" />
     <Content Include="GameAssets\images\cn_static.png" />
+    <Content Include="img\glyphs\up_arrow.png" />
     <Content Include="img\glyphs\left_arrow.png" />
     <Content Include="img\glyphs\right_arrow.png" />
     <Content Include="img\glyphs\axe.png" />

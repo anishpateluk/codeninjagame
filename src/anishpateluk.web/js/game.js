@@ -424,6 +424,15 @@
                 e.preventDefault();
                 keydown.right = false;
             });
+            
+            $("#up-key").on("touchstart", function (e) {
+                e.preventDefault();
+                keydown.up = true;
+            });
+            $("#up-key").on("touchend", function (e) {
+                e.preventDefault();
+                keydown.up = false;
+            });
 
             $("#space-key").on("touchstart", function (e) {
                 e.preventDefault();
