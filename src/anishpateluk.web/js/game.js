@@ -14,9 +14,9 @@
     codeNinjaImg.width = 4500;
     
     // block image
-    var blockImg = new Image();
-    blockImg.height = 50;
-    blockImg.width = 50;
+    var platformImg = new Image();
+    platformImg.height = 50;
+    platformImg.width = 300;
 
     // game functions
     var game = window.game = {
@@ -66,7 +66,7 @@
             x = Math.round(x);
             y = Math.round(y);
 
-            var platform = new createjs.Bitmap(blockImg);
+            var platform = new createjs.Bitmap(platformImg);
             platform.x = x;
             platform.y = y;
             platform.snapToPixel = true;
@@ -137,9 +137,9 @@
             codeNinjaImg.onerror = game.handleImageError;
             codeNinjaImg.src = "/GameAssets/images/cn_master.png";
 
-            blockImg.onload = game.handleImageLoad;
-            blockImg.onerror = game.handleImageError;
-            blockImg.src = "/GameAssets/images/mario_dirt_tile.png";
+            platformImg.onload = game.handleImageLoad;
+            platformImg.onerror = game.handleImageError;
+            platformImg.src = "/GameAssets/images/mario_platform.png";
 
         } catch(e) {
             console.log(e);
@@ -361,13 +361,13 @@
         
         // add platforms
         var halfWidth = gameWidth / 2;
-        for (var i = 0; i < gameWidth; i += 50) {
+        for (var i = 0; i < gameWidth; i += 300) {
             game.addPlatform(i, gameHeight - 50);
             
 
             if (i >= halfWidth) {
                 game.addPlatform(i, gameHeight - 100);
-                if (i >= halfWidth + 100) {
+                if (i >= halfWidth + 300) {
                     game.addPlatform(i, gameHeight - 150);
                 }
             }
