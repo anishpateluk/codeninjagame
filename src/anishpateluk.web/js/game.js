@@ -360,17 +360,8 @@
         gameHeight = canvas.height;
         
         // add platforms
-        var halfWidth = gameWidth / 2;
-        for (var i = 0; i < gameWidth; i += 300) {
+        for (var i = 0; i < gameWidth; i += 400) {
             game.addPlatform(i, gameHeight - 50);
-            
-
-            if (i >= halfWidth) {
-                game.addPlatform(i, gameHeight - 100);
-                if (i >= halfWidth + 300) {
-                    game.addPlatform(i, gameHeight - 150);
-                }
-            }
         }
         
         // set up player
