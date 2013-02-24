@@ -118,6 +118,56 @@
             }
 
             return bounds;
+        },
+        calculateCollision: function(obj, direction, collideables, moveBy) {
+            moveBy = moveBy || { x: 0, y: 0 };
+            if (direction != 'x' && direction != 'y') {
+                direction = 'x';
+            }
+            var measure = direction == 'x' ? 'width' : 'height',
+              oppositeDirection = direction == 'x' ? 'y' : 'x',
+              oppositeMeasure = direction == 'x' ? 'height' : 'width',
+
+              bounds = game.getBounds(obj),
+              cbounds,
+              collision = null,
+              cc = 0;
+
+            // for each collideable object we will calculate the
+            // bounding-rectangle and then check for an intersection
+            // of the hero's future position's bounding-rectangle
+            while (!collision && cc < collideables.length) {
+                cbounds = game.getBounds(collideables[cc]);
+                if (collideables[cc].isVisible) {
+                    collision = game.calculateIntersection(bounds, cbounds, moveBy.x, moveBy.y);
+                }
+
+                if (!collision && collideables[cc].isVisible) {
+                    // if there was NO collision detected, but somehow
+                    // the hero got onto the "other side" of an object (high velocity e.g.),
+                    // then we will detect this here, and adjust the velocity according to
+                    // it to prevent the Hero from "ghosting" through objects
+                    // try messing with the 'this.velocity = {x:0,y:125};'
+                    // -> it should still collide even with very high values
+                    var wentThroughForwards = (bounds[direction] < cbounds[direction] && bounds[direction] + moveBy[direction] > cbounds[direction]),
+                      wentThroughBackwards = (bounds[direction] > cbounds[direction] && bounds[direction] + moveBy[direction] < cbounds[direction]),
+                      withinOppositeBounds = !(bounds[oppositeDirection] + bounds[oppositeMeasure] < cbounds[oppositeDirection])
+                                && !(bounds[oppositeDirection] > cbounds[oppositeDirection] + cbounds[oppositeMeasure]);
+
+                    if ((wentThroughForwards || wentThroughBackwards) && withinOppositeBounds) {
+                        moveBy[direction] = cbounds[direction] - bounds[direction];
+                    } else {
+                        cc++;
+                    }
+                }
+            }
+
+            if (collision) {
+                var sign = Math.abs(moveBy[direction]) / moveBy[direction];
+                moveBy[direction] -= collision[measure] * sign;
+            }
+
+            return collision;
         }
     };
 
@@ -204,61 +254,38 @@
             else playAnimation("idle_h");
         };
 
-        self.tick = function() {
-            self.velocity.y += 1;
+        self.tick = function () {
+            this.velocity.y += 1;
 
-            var c = 0,
-                cc = 0,
-                addY =  self.velocity.y,
-                bounds = game.getBounds(self.animation),
-                cbounds,
+            // preparing the variables
+            var moveBy = { x: 0, y: self.velocity.y },
                 collision = null,
                 collideables = game.collideables;
 
-            cc = 0;
-            
-            // for each collideable object we will calculate the
-            // bounding-rectangle and then check for an intersection
-            // of the hero's future position's bounding-rectangle
-            while (!collision && cc < collideables.length) {
-                cbounds = game.getBounds(collideables[cc]);
-                if (collideables[cc].isVisible()) {
-                    collision = game.calculateIntersection(bounds, cbounds, 0, addY);
-                }
+            collision = game.calculateCollision(self.animation, 'y', collideables, moveBy);
+            // moveBy is now handled by 'calculateCollision'
+            // and can also be 0 - therefore we won't have to worry
+            self.animation.y += moveBy.y;
 
-                if (!collision && collideables[cc].isVisible()) {
-                    // if there was NO collision detected, but somehow
-                    // the hero got onto the "other side" of an object (high velocity e.g.),
-                    // then we will detect this here, and adjust the velocity according to
-                    // it to prevent the Hero from "ghosting" through objects
-                    // try messing with the 'this.velocity = {x:0,y:25};'
-                    // -> it should still collide even with very high values
-                    if ((bounds.y < cbounds.y && bounds.y + addY > cbounds.y)
-                      || (bounds.y > cbounds.y && bounds.y + addY < cbounds.y)) {
-                        addY = cbounds.y - bounds.y;
-                    } else {
-                        cc++;
-                    }
-                }
-            }
-            
-            // if no collision was to be found, just
-            //  move the hero to it's new position
             if (!collision) {
-                self.animation.y += addY;
                 if (self.onGround) {
                     self.onGround = false;
+                    //self.doubleJump = true;
                 }
-                // else move the hero as far as possible
-                // and then make it stop and tell the
-                // game, that the hero is now "an the ground"
             } else {
-                self.animation.y += addY - collision.height;
-                if (addY > 0) {
+                // the hero can only be 'onGround'
+                // when he's hitting floor and not
+                // some ceiling
+                if (moveBy.y > 0) {
                     self.onGround = true;
+                    //self.doubleJump = false;
                 }
                 self.velocity.y = 0;
             }
+
+            moveBy = { x: self.velocity.x, y: 0 };
+            collision = game.calculateCollision(self.animation, 'x', game.collideables, moveBy);
+            self.animation.x += moveBy.x;
         };
 
         function playAnimation(animationName) {
@@ -365,7 +392,7 @@
         }
         
         // set up player
-        player = window.player = new codeNinja({ x: 100, y: gameHeight - 99 });
+        player = window.player = new codeNinja({ x: 250, y: gameHeight - 99 });
 
         //add player to world
         world.addChild(player.animation);
