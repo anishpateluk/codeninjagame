@@ -94,10 +94,7 @@
                     imgr = { width: obj.image.width, height: obj.image.height };
                 } else if (obj instanceof createjs.BitmapAnimation) {
                     gp = obj.localToGlobal(0, 0);
-                    imgr = {
-                        width: obj.spriteSheet._frames[obj.currentFrame].regX,
-                        height: obj.spriteSheet._frames[obj.currentFrame].regY
-                    };
+                    imgr = { width: 50, height: 50 };// obj.spriteSheet._frames[obj.currentFrame];
                 } else {
                     return bounds;
                 }
@@ -411,6 +408,8 @@
     // game loop
     window.tick = function tick() {
 
+        player.tick();
+
         if (canPlayAnimation && keydown.left) player.moveLeft();
 
         if (canPlayAnimation && keydown.right) player.moveRight();
@@ -421,7 +420,7 @@
 
         if (keydown.space) player.attack();
 
-        player.tick();
+        
         
         if (player.animation.y > gameHeight * 3) {
             startGame();
