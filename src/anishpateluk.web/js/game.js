@@ -19,7 +19,7 @@
     platformImg.width = 300;
 
     // game functions
-    var game = window.game = {
+    var game = {
         handleImageError: function(e) {
             throw new Error("Error Loading Image : " + e.target.src);
         },
@@ -347,7 +347,7 @@
     };
     
     // game setup
-    window.startGame = function startGame() {
+    function startGame() {
         // set up stage
         stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
