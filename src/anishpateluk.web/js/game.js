@@ -398,6 +398,23 @@
         if (keydown.space) player.attack();
 
         player.tick();
+        
+        if (player.animation.y > gameHeight * 3) {
+            startGame();
+        }
+        
+        // if the hero "leaves" it's bounds of
+        // screenWidth * 0.3 and screenHeight * 0.3(to both ends)
+        // we will reposition the "world-container", so our hero
+        // is allways visible
+        if (player.animation.x > gameWidth * .3) {
+            world.x = -player.animation.x + gameWidth * .3;
+        }
+        if (player.animation.y > gameHeight * .7) {
+            world.y = -player.animation.y + gameHeight * .7;
+        } else if (player.animation.y < gameHeight * .3) {
+            world.y = -player.animation.y + gameHeight * .3;
+        }
 
         // update stage
         stage.update();
