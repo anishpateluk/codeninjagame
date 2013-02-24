@@ -185,7 +185,8 @@
         self.moveRight = function () {
             if (direction != 90) direction = 90;
             playAnimation("run");
-            if (self.animation.x <= gameWidth - offset) self.animation.x += self.velocity.x;
+            //if (self.animation.x <= gameWidth - offset)
+                self.animation.x += self.velocity.x;
         };
 
         self.jump = function () {
