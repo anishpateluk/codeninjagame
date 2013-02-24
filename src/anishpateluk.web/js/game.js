@@ -94,7 +94,10 @@
                     imgr = { width: obj.image.width, height: obj.image.height };
                 } else if (obj instanceof createjs.BitmapAnimation) {
                     gp = obj.localToGlobal(0, 0);
-                    imgr = obj.spriteSheet._frames[obj.currentFrame];
+                    imgr = {
+                        width: obj.spriteSheet._frames[obj.currentFrame].regX,
+                        height: obj.spriteSheet._frames[obj.currentFrame].regY
+                    };
                 } else {
                     return bounds;
                 }
@@ -190,8 +193,8 @@
             else playAnimation("jump_h");
             
             if (self.onGround) {
-                self.velocity.y = -100;
-                self.onGround = false;
+                self.velocity.y = -15;
+                //self.onGround = false;
             }
         };
         
@@ -211,8 +214,6 @@
                 collision = null,
                 collideables = game.collideables;
 
-            bounds.height = 50;
-            bounds.width = 10;
             cc = 0;
             
             // for each collideable object we will calculate the
@@ -301,7 +302,7 @@
                         frequency: 4
                     },
                     jump: {
-                        frames: [30, 31, 32],
+                        frames: [30, 30, 31, 31, 32, 32],
                         frequency: 6
                     },
                     hit: {
