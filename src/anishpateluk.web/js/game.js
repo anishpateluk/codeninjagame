@@ -132,6 +132,9 @@
               cbounds,
               collision = null,
               cc = 0;
+            if (direction == "x") {
+                bounds.width = 10;
+            }
 
             // for each collideable object we will calculate the
             // bounding-rectangle and then check for an intersection
@@ -209,9 +212,9 @@
             scaleY: 1
         };
         var settings = $.extend(defaultOptions, options);
-        self.velocity = { x: 5, y: 25 };
+        self.velocity = { x: 2, y: 25 };
         var offset = 50;
-        var direction = 90;
+        var pdirection = 90;
         var spriteSheet;
         var currentAnimation;
         var canPlayAnimation = window.canPlayAnimation = true;
@@ -222,25 +225,27 @@
 
         // public methods
         self.attack = function() {
-            if (direction == 90) playAnimation("attack");
+            if (pdirection == 90) playAnimation("attack");
             else playAnimation("attack_h");
         };
 
         self.moveLeft = function () {
-            if (direction != -90) direction = -90;
+            if (pdirection != -90) pdirection = -90;
             playAnimation("run_h");
-            if (self.animation.x >= offset) self.animation.x -= self.velocity.x;
+            //if (self.animation.x >= offset) self.animation.x -= self.velocity.x;
+            self.velocity.x = -5;
         };
         
         self.moveRight = function () {
-            if (direction != 90) direction = 90;
+            if (pdirection != 90) pdirection = 90;
             playAnimation("run");
             //if (self.animation.x <= gameWidth - offset)
-                self.animation.x += self.velocity.x;
+            //self.animation.x += self.velocity.x;
+            self.velocity.x = 5;
         };
 
         self.jump = function () {
-            if (direction == 90) playAnimation("jump");
+            if (pdirection == 90) playAnimation("jump");
             else playAnimation("jump_h");
             
             if (self.onGround) {
@@ -250,7 +255,7 @@
         };
         
         self.idle = function () {
-            if (direction == 90) playAnimation("idle");
+            if (pdirection == 90) playAnimation("idle");
             else playAnimation("idle_h");
         };
 
@@ -388,11 +393,11 @@
         
         // add platforms
         for (var i = 0; i < gameWidth; i += 400) {
-            game.addPlatform(i, gameHeight - 50);
+            game.addPlatform(i, gameHeight);
         }
         
         // set up player
-        player = window.player = new codeNinja({ x: 250, y: gameHeight - 99 });
+        player = window.player = new codeNinja({ x: 200, y: gameHeight - 150 });
 
         //add player to world
         world.addChild(player.animation);
