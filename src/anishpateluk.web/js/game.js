@@ -298,7 +298,8 @@
         function playAnimation(animationName) {
             var isAttack = animationName.indexOf("attack") != -1;
             var isJump = animationName.indexOf("jump") != -1;
-            if (isAttack || isJump) {
+            var isChuck = animationName.indexOf("chuck") != -1;
+            if (isAttack || isJump || isChuck) {
                 canPlayAnimation = false;
                 self.animation.addEventListener("animationend", function () {
                     self.animation.removeAllEventListeners("animationend");
@@ -307,7 +308,8 @@
             }
             if ((isAttack && animationName != currentAnimation)
                 || (isJump && animationName != currentAnimation)
-                || (!isAttack && !isJump && canPlayAnimation && animationName != currentAnimation)) {
+                || (isChuck && animationName != currentAnimation)
+                || (!isAttack && !isJump && !isChuck && canPlayAnimation && animationName != currentAnimation)) {
                 self.animation.gotoAndStop(currentAnimation);
                 currentAnimation = animationName;
                 self.animation.gotoAndPlay(animationName);
@@ -322,7 +324,7 @@
                 frames: {
                     width: 100,
                     height: 100,
-                    count: 45,
+                    count: 51,
                     regX: 50,
                     regY: 50
                 },
@@ -349,7 +351,8 @@
                         frequency: 4
                     },
                     chuck: {
-                        frames: [45, 46, 47, 48, 49, 50]
+                        frames: [45, 46, 47, 48, 49, 50],
+                        frequency: 5
                     }
                 }
             });
