@@ -196,15 +196,12 @@
         self.moveLeft = function () {
             if (pdirection != -90) pdirection = -90;
             playAnimation("run_h");
-            //if (self.animation.x >= offset) self.animation.x -= self.velocity.x;
             self.velocity.x = -5;
         };
         
         self.moveRight = function () {
             if (pdirection != 90) pdirection = 90;
             playAnimation("run");
-            //if (self.animation.x <= gameWidth - offset)
-            //self.animation.x += self.velocity.x;
             self.velocity.x = 5;
         };
 
@@ -248,7 +245,7 @@
                 // the hero can only be 'onGround'
                 // when he's hitting floor and not
                 // some ceiling
-                if (moveBy.y > 0) {
+                if (moveBy.y >= 0) {
                     self.onGround = true;
                     //self.doubleJump = false;
                 }
