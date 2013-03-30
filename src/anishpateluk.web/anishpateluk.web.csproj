@@ -151,6 +151,7 @@
     <Content Include="img\glyphs\right_arrow.png" />
     <Content Include="img\glyphs\axe.png" />
     <Content Include="js\game.js" />
+    <Content Include="js\game2.js" />
     <Content Include="js\vendor\easeljs-0.6.0.js" />
     <Content Include="js\vendor\jquery-1.9.1.js" />
     <Content Include="js\vendor\jquery.hotkeys.js" />
