@@ -128,18 +128,27 @@
         
         // properties
         this.direction = 1;
-        this.currentAnimation = "idle";
+        this.canPlayAnimation = true;
         this.reset(position);
     };
 
-    CodeNinja.prototype.playAnimation = function(animation) {
-        this.currentAnimation = animation;
-        this.direction ? this.gotoAndPlay(animation) : this.gotoAndPlay(animation + "_h");
+    CodeNinja.prototype.playAnimation = function (animation) {
+
+        if (animation !== this.currentAnimation) {
+            this.currentAnimation = animation;
+            this.direction ? this.gotoAndPlay(animation) : this.gotoAndPlay(animation + "_h");
+        }
+
+
     };  
 
     CodeNinja.prototype.reset = function(position) {
         this.x = position.x;
         this.y = position.y;
+        this.playAnimation("idle");
+    };
+    
+    CodeNinja.prototype.idle = function () {
         this.playAnimation("idle");
     };
 
@@ -165,7 +174,15 @@
         this.playAnimation("rangeAttack");
     };
 
-    window.tick = function() {
+    window.tick = function () {
+
+        if (keydown.left) Player.moveLeft();
+        if (keydown.right) Player.moveRight();
+        if (keydown.up) Player.jump();
+        if (keydown.q) Player.meleeAttack();
+        if (keydown.w) Player.rangeAttack();
+        if (!keydown.up && !keydown.left && !keydown.right && !keydown.w && !keydown.q) Player.idle();
+        
         Stage.update();
     };
 
