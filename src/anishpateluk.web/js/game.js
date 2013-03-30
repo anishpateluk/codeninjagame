@@ -300,27 +300,36 @@
                     run: {
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
                         frequency: 4,
-                        next: "idle"
+                        next: "run"
                     },
                     jump: {
                         frames: [30, 30, 31, 31, 32, 32],
                         frequency: 6,
-                        next: "idle"
+                        next: "trans"
                     },
+                    
                     hit: {
                         frames: [36, 35, 36],
                         frequency: 3,
-                        next: "idle"
+                        next: "trans"
                     },
+                    
                     attack: {
                         frames: [37, 38, 39, 40, 41, 42, 43, 44],
                         frequency: 4,
-                        next: "idle"
+                        next: "trans"
                     },
+                    
                     chuck: {
                         frames: [45, 46, 47, 48, 49, 50],
                         frequency: 5,
-                        next: "idle"
+                        next: "trans"
+                    },
+                    
+                    trans: {
+                        frames: [0],
+                        frequency: 1,
+                        next: "trans"
                     }
                 }
             });
