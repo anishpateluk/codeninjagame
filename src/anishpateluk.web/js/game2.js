@@ -113,11 +113,11 @@
                     frames: [36, 35, 36],
                     frequency: 3
                 },
-                attack: {
+                meleeAttack: {
                     frames: [37, 38, 39, 40, 41, 42, 43, 44],
                     frequency: 4
                 },
-                chuck: {
+                rangeAttack: {
                     frames: [45, 46, 47, 48, 49, 50],
                     frequency: 5
                 }
@@ -127,15 +127,42 @@
         this.BitmapAnimation_initialize(spriteSheet);
         
         // properties
-        this.direction = "right";
-        
+        this.direction = 1;
+        this.currentAnimation = "idle";
         this.reset(position);
     };
+
+    CodeNinja.prototype.playAnimation = function(animation) {
+        this.currentAnimation = animation;
+        this.direction ? this.gotoAndPlay(animation) : this.gotoAndPlay(animation + "_h");
+    };  
 
     CodeNinja.prototype.reset = function(position) {
         this.x = position.x;
         this.y = position.y;
-        this.direction == "right" ? this.gotoAndPlay("idle") : this.gotoAndPlay("idle_h");
+        this.playAnimation("idle");
+    };
+
+    CodeNinja.prototype.moveLeft = function() {
+        this.direction = 0;
+        this.playAnimation("run");
+    };
+
+    CodeNinja.prototype.moveRight = function () {
+        this.direction = 1;
+        this.playAnimation("run");
+    };
+    
+    CodeNinja.prototype.jump = function () {
+        this.playAnimation("jump");
+    };
+    
+    CodeNinja.prototype.meleeAttack = function () {
+        this.playAnimation("meleeAttack");
+    };
+
+    CodeNinja.prototype.rangeAttack = function () {
+        this.playAnimation("rangeAttack");
     };
 
     window.tick = function() {
