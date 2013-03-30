@@ -221,6 +221,7 @@
         self.idle = function () {
             if (pdirection == 90) playAnimation("idle");
             else playAnimation("idle_h");
+            self.velocity.x = 0;
         };
 
         self.tick = function () {
@@ -388,8 +389,6 @@
 
     // game loop
     window.tick = function tick() {
-
-        player.tick();
         
         if (canPlayAnimation && keydown.left) player.moveLeft();
 
@@ -397,7 +396,7 @@
         
         if (canPlayAnimation && keydown.up) player.jump();
         
-        if (canPlayAnimation && !keydown.up && !keydown.left && !keydown.right && !keydown.space) player.idle();
+        if (canPlayAnimation && !keydown.up && !keydown.left && !keydown.right && !keydown.space && !keydown.c) player.idle();
 
         if (keydown.space) player.attack();
 
@@ -406,6 +405,8 @@
         if (player.animation.y > gameHeight * 3) {
             startGame();
         }
+        
+        player.tick();
         
         // if the hero "leaves" it's bounds of
         // screenWidth * 0.3 and screenHeight * 0.3(to both ends)
