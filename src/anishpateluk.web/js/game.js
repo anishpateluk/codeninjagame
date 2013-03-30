@@ -11,7 +11,7 @@
     // sprite sheet image
     var codeNinjaImg = new Image();
     codeNinjaImg.height = 100;
-    codeNinjaImg.width = 4500;
+    codeNinjaImg.width = 5100;
     
     // block image
     var platformImg = new Image();
