@@ -268,6 +268,10 @@
             var moveBy = { x: 0, y: self.velocity.y },
                 collision = null,
                 collideables = game.collideables;
+            
+            moveBy = { x: self.velocity.x, y: self.velocity.y };
+            collision = game.calculateCollision(self.animation, 'x', game.collideables, moveBy);
+            //self.animation.x += moveBy.x;
 
             collision = game.calculateCollision(self.animation, 'y', collideables, moveBy);
             // moveBy is now handled by 'calculateCollision'
@@ -290,9 +294,7 @@
                 self.velocity.y = 0;
             }
 
-            moveBy = { x: self.velocity.x, y: 0 };
-            collision = game.calculateCollision(self.animation, 'x', game.collideables, moveBy);
-            self.animation.x += moveBy.x;
+            
         };
 
         function playAnimation(animationName) {
@@ -332,27 +334,33 @@
                 animations: {
                     idle: {
                         frames: [0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20],
-                        frequency: 5
+                        frequency: 5,
+                        next: "idle"
                     },
                     run: {
                         frames: [21, 22, 23, 24, 25, 26, 27, 28],
-                        frequency: 4
+                        frequency: 4,
+                        next: "idle"
                     },
                     jump: {
                         frames: [30, 30, 31, 31, 32, 32],
-                        frequency: 6
+                        frequency: 6,
+                        next: "idle"
                     },
                     hit: {
                         frames: [36, 35, 36],
-                        frequency: 3
+                        frequency: 3,
+                        next: "idle"
                     },
                     attack: {
                         frames: [37, 38, 39, 40, 41, 42, 43, 44],
-                        frequency: 4
+                        frequency: 4,
+                        next: "idle"
                     },
                     chuck: {
                         frames: [45, 46, 47, 48, 49, 50],
-                        frequency: 5
+                        frequency: 5,
+                        next: "idle"
                     }
                 }
             });
