@@ -225,6 +225,11 @@
             if (pdirection == 90) playAnimation("attack");
             else playAnimation("attack_h");
         };
+        
+        self.chuck = function () {
+            if (pdirection == 90) playAnimation("chuck");
+            else playAnimation("chuck_h");
+        };
 
         self.moveLeft = function () {
             if (pdirection != -90) pdirection = -90;
@@ -342,6 +347,9 @@
                     attack: {
                         frames: [37, 38, 39, 40, 41, 42, 43, 44],
                         frequency: 4
+                    },
+                    chuck: {
+                        frames: [45, 46, 47, 48, 49, 50]
                     }
                 }
             });
@@ -409,7 +417,7 @@
     window.tick = function tick() {
 
         player.tick();
-
+        
         if (canPlayAnimation && keydown.left) player.moveLeft();
 
         if (canPlayAnimation && keydown.right) player.moveRight();
@@ -420,7 +428,7 @@
 
         if (keydown.space) player.attack();
 
-        
+        if (keydown.c) player.chuck();
         
         if (player.animation.y > gameHeight * 3) {
             startGame();
