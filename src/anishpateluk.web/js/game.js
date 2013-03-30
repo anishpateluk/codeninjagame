@@ -42,19 +42,21 @@
             audio.play();
             audio.volume = 0.1;
         },
-        calculateIntersection: function(rect1, rect2, x, y) {
-            x = x || 0;
-            y = y || 0;
+        calculateIntersection: function (rect1, rect2, x, y) {
+            // prevent x|y from being null||undefined
+            x = x || 0; y = y || 0;
 
+            // first we have to calculate the
+            // center of each rectangle and half of
+            // width and height
             var dx, dy, r1 = {}, r2 = {};
+            r1.cx = rect1.x + x + (r1.hw = (rect1.width / 2));
+            r1.cy = rect1.y + y + (r1.hh = (rect1.height / 2));
+            r2.cx = rect2.x + (r2.hw = (rect2.width / 2));
+            r2.cy = rect2.y + (r2.hh = (rect2.height / 2));
 
-            r1.cx = rect1.x + x + (r1.halfWidth = (rect1.width / 2));
-            r1.cy = rect1.y + y + (r1.halfHeight = (rect1.height / 2));
-            r2.cx = rect2.x + x + (r2.halfWidth = (rect2.width / 2));
-            r2.cy = rect2.y + y + (r2.halfHeight = (rect2.height / 2));
-
-            dx = Math.abs(r1.cx - r2.cx) - (r1.halfWidth + r2.halfWidth);
-            dy = Math.abs(r1.cy - r2.cy) - (r1.halfHeight + r2.halfHeight);
+            dx = Math.abs(r1.cx - r2.cx) - (r1.hw + r2.hw);
+            dy = Math.abs(r1.cy - r2.cy) - (r1.hh + r2.hh);
 
             if (dx < 0 && dy < 0) {
                 return { width: -dx, height: -dy };
@@ -75,47 +77,7 @@
             world.addChild(platform);
         },
         collideables: [],
-        getBounds: function(obj) {
-            var bounds = { x: Infinity, y: Infinity, width: 0, height: 0 };
-
-            if (obj instanceof createjs.Container) {
-                var children = object.children, l = children.length, cbounds, c;
-                for (c = 0; c < l; c++) {
-                    cbounds = getBounds(children[c]);
-                    if (cbounds.x < bounds.x) bounds.x = cbounds.x;
-                    if (cbounds.y < bounds.y) bounds.y = cbounds.y;
-                    if (cbounds.width > bounds.width) bounds.width = cbounds.width;
-                    if (cbounds.height > bounds.height) bounds.height = cbounds.height;
-                }
-            } else {
-                var gp, imgr;
-                if (obj instanceof createjs.Bitmap) {
-                    gp = obj.localToGlobal(0, 0);
-                    imgr = { width: obj.image.width, height: obj.image.height };
-                } else if (obj instanceof createjs.BitmapAnimation) {
-                    gp = obj.localToGlobal(0, 0);
-                    imgr = { width: 50, height: 50 };// obj.spriteSheet._frames[obj.currentFrame];
-                } else {
-                    return bounds;
-                }
-
-                bounds.width = imgr.width * Math.abs(obj.scaleX);
-                if (obj.scaleX >= 0) {
-                    bounds.x = gp.x;
-                } else {
-                    bounds.x = gp.x - bounds.width;
-                }
-
-                bounds.height = imgr.height * Math.abs(obj.scaleY);
-                if (obj.scaleX >= 0) {
-                    bounds.y = gp.y;
-                } else {
-                    bounds.y = gp.y - bounds.height;
-                }
-            }
-
-            return bounds;
-        },
+        getBounds: ndgmr.getBounds,
         calculateCollision: function(obj, direction, collideables, moveBy) {
             moveBy = moveBy || { x: 0, y: 0 };
             if (direction != 'x' && direction != 'y') {
@@ -129,9 +91,9 @@
               cbounds,
               collision = null,
               cc = 0;
-            if (direction == "x") {
-                bounds.width = 10;
-            }
+            //if (direction == "x") {
+            //    bounds.width = 10;
+            //}
 
             // for each collideable object we will calculate the
             // bounding-rectangle and then check for an intersection
@@ -209,7 +171,7 @@
             scaleY: 1
         };
         var settings = $.extend(defaultOptions, options);
-        self.velocity = { x: 2, y: 25 };
+        self.velocity = { x: 0, y: 25 };
         var offset = 50;
         var pdirection = 90;
         var spriteSheet;
@@ -269,9 +231,7 @@
                 collision = null,
                 collideables = game.collideables;
             
-            moveBy = { x: self.velocity.x, y: self.velocity.y };
-            collision = game.calculateCollision(self.animation, 'x', game.collideables, moveBy);
-            //self.animation.x += moveBy.x;
+            
 
             collision = game.calculateCollision(self.animation, 'y', collideables, moveBy);
             // moveBy is now handled by 'calculateCollision'
@@ -294,7 +254,9 @@
                 self.velocity.y = 0;
             }
 
-            
+            moveBy = { x: self.velocity.x, y: 0 };
+            collision = game.calculateCollision(self.animation, 'x', game.collideables, moveBy);
+            self.animation.x += moveBy.x;
         };
 
         function playAnimation(animationName) {
