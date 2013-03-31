@@ -57,7 +57,8 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     this.velocity = { x: 0, y: 25 };
     this.canPlayAnimation = true;
     this.canMove = true;
-    this.canJump = true;
+    this.doubleJump = false;
+    this.onGround = true;
     this.currentAnimation = "";
     this.getBounds = function() {
         return {
@@ -119,9 +120,17 @@ CodeNinja.prototype.moveRight = function () {
 };
 
 CodeNinja.prototype.jump = function () {
-    if (!this.canJump) return;
-    this.velocity.y = -15;
-    this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    if (this.onGround) {
+        this.velocity.y = -15;
+        this.onGround = false;
+        this.doubleJump = true;
+        this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    } 
+    else if (this.doubleJump) {
+        this.velocity.y = -15;
+        this.doubleJump = false;
+        this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    }
 };
 
 CodeNinja.prototype.meleeAttack = function () {
@@ -152,8 +161,14 @@ CodeNinja.prototype.tick = function(game) {
 
     if (!collision) {
         self.y += velocity.y;
+        if (self.onGround) {
+            self.onGround = false;
+        }
     } else {
         self.y += velocity.y - collision.height;
+        if (velocity.y > 0) {
+            self.onGround = true;
+        }
         velocity.y = 0;
     }
 
