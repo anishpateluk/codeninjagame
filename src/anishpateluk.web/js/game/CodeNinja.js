@@ -157,5 +157,5 @@ CodeNinja.prototype.tick = function(game) {
         velocity.y = 0;
     }
 
-    self.x += self.velocity.x;
+    if(self.x != self.velocity.x > 0) self.x += self.velocity.x;
 }
