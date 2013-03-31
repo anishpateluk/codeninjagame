@@ -132,13 +132,30 @@ CodeNinja.prototype.rangeAttack = function () {
     this.direction == 1 ? this.playAnimation("rangeAttack") : this.playAnimation("rangeAttack_h");
 };
 
-CodeNinja.prototype.tick = function() {
+CodeNinja.prototype.tick = function(game) {
     var self = this;
 
     // gravity
-    //self.velocity.y += 1;
-    self.velocity.y = 0;
+    self.velocity.y += 1;
+    
+    var bounds = ndgmr.getBounds(self);
+    var velocity = self.velocity;
+    var platforms = game.platforms;
+    var collision = null, i = 0;
+    
+    while (!collision && i < platforms.length) {
+        var cbounds = ndgmr.getBounds(platforms[i]);
+
+        collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
+        i++;
+    }
+
+    if (!collision) {
+        self.y += velocity.y;
+    } else {
+        self.y += velocity.y - collision.height;
+        velocity.y = 0;
+    }
 
     self.x += self.velocity.x;
-    self.y += self.velocity.y;
 }

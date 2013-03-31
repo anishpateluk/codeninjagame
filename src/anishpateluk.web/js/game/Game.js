@@ -167,7 +167,7 @@
         if (keydown.w) Player.rangeAttack();
         if (!keydown.up && !keydown.left && !keydown.right && !keydown.w && !keydown.q) Player.idle();
 
-        Player.tick();
+        Player.tick(Game);
 
         Game.tick();
         
