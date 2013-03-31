@@ -156,6 +156,11 @@
         } else if (Player.y < GameHeight * .6) {
             World.y = -Player.y + GameHeight * .6;
         }
+        
+        // reset player if fallen off edge
+        if (Player.y > GameHeight * 3) {
+            Player.reset({ x: 450, y: GameHeight - 150 });
+        }
 
         // move background
         Background.x = (World.x * .45) % (GameWidth / GRID_H);
