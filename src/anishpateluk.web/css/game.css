@@ -8,7 +8,11 @@
   margin: 5% auto 0px;
 }
 #game-canvas {
-  background-color: skyblue;
+  background: linear-gradient(bottom, #282828 40%, #515b61 70%);
+  background: -o-linear-gradient(bottom, #282828 40%, #515b61 70%);
+  background: -moz-linear-gradient(bottom, #282828 40%, #515b61 70%);
+  background: -webkit-linear-gradient(bottom, #282828 40%, #515b61 70%);
+  background: -ms-linear-gradient(bottom, #282828 40%, #515b61 70%);
 }
 #info {
   text-align: center;
