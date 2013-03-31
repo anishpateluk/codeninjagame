@@ -5,7 +5,7 @@ function GameContentManager(callback) {
 
     self.CodeNinjaImage = new Image();
     self.PlatformImage = new Image();
-
+    
     var requestedAssets = 0;
     var totalAssets = 2;
 
