@@ -122,12 +122,18 @@
         stage.addChild(world);
 
         // add platforms
-        for (var i = 0; i < GameWidth; i += 300) {
+        for (var i = 0; i < GameWidth * 1.5; i += 300) {
             Game.addPlatform(i, GameHeight);
+        }
+        for (var i = 0; i < GameWidth * 1.5; i += 300) {
+            Game.addPlatform(i * 2, GameHeight - 150);
+        }
+        for (var i = 150; i < GameWidth * 1.5; i += 300) {
+            Game.addPlatform(i * 2, GameHeight - 300);
         }
 
         // set up player
-        var player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 200, y: GameHeight / 2 });
+        var player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 150 });
 
         // add player to world
         world.addChild(player);
