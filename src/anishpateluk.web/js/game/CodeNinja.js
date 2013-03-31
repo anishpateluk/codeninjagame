@@ -123,3 +123,10 @@ CodeNinja.prototype.meleeAttack = function () {
 CodeNinja.prototype.rangeAttack = function () {
     this.direction ? this.playAnimation("rangeAttack") : this.playAnimation("rangeAttack_h");
 };
+
+CodeNinja.prototype.tick = function() {
+    var self = this;
+
+    // gravity
+    self.velocity.y += 1;
+}
