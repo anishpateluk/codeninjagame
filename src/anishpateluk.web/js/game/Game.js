@@ -10,12 +10,28 @@
     Game = {};
     Game.utils = {};
 
-    // game utils
-    Game.utils.resizeCanvas = function (canvas) {
+    Game.platforms = [];
+
+    Game.addPlatform = function(x, y) {
+        var contentManager = ContentManager;
+        x = Math.round(x);
+        y = Math.round(y);
+
+        var platform = new createjs.Bitmap(contentManager.PlatformImage);
+        platform.x = x;
+        platform.y = y;
+        platform.snapToPixel = true;
+
+        Game.platforms.push(platform);
+        World.addChild(platform);
+    };
+
+    Game.resizeCanvas = function (canvas) {
         canvas.width = window.innerWidth;
         canvas.height = GameHeight;
     };
 
+    // game utils
     Game.utils.createBgGrid = function (numX, numY, thickness) {
         var thickFactor = thickness || 0.01;
         var grid = new createjs.Container();
@@ -46,7 +62,7 @@
         }
         return grid;
     };
-
+    
     // game initialization
     Game.init = function () {
         var contentManager = ContentManager = new GameContentManager(function() {
@@ -57,7 +73,7 @@
     };
     
     Game.start = function (canvas) {
-        Game.utils.resizeCanvas(canvas);
+        Game.resizeCanvas(canvas);
         GameHeight = canvas.height;
         GameWidth = canvas.width;
         var contentManager = ContentManager;
@@ -76,8 +92,13 @@
         var world = World = new createjs.Container();
         stage.addChild(world);
 
+        // add platforms
+        for (var i = 0; i < GameWidth; i += 300) {
+            Game.addPlatform(i, GameHeight);
+        }
+
         // set up player
-        var player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: GameWidth / 2, y: GameHeight / 2 });
+        var player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 200, y: GameHeight / 2 });
 
         // add player to world
         world.addChild(player);
@@ -89,8 +110,8 @@
         createjs.Ticker.setFPS(FramesPerSecond);
     };
 
-    Game.tick = function() {
-
+    Game.tick = function () {
+        
         // move world with player
         if (Player.x > GameWidth * .3) {
             World.x = -Player.x + GameWidth * .3;
