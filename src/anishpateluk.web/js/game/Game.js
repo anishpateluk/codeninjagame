@@ -173,10 +173,7 @@
 
         if (keydown.left) Player.moveLeft();
         if (keydown.right) Player.moveRight();
-        if (keydown.up) Player.jump();
-        if (keydown.q) Player.meleeAttack();
-        if (keydown.w) Player.rangeAttack();
-        if (!keydown.up && !keydown.left && !keydown.right && !keydown.w && !keydown.q) Player.idle();
+        if (!keydown.left && !keydown.right) Player.idle();
 
         Player.tick(Game);
 
@@ -184,18 +181,25 @@
         
         Stage.update();
     };
+    
+    function keyName(event) {
+        return jQuery.hotkeys.specialKeys[event.which] ||
+          String.fromCharCode(event.which).toLowerCase();
+    }
+
+    Game.handleKeydown = function (keydown) {
+        if (keydown.up) Player.jump();
+        if (keydown.q) Player.meleeAttack();
+        if (keydown.w) Player.rangeAttack();
+    };
 
     // set up keyboard input
     $(function () {
         window.keydown = {};
-
-        function keyName(event) {
-            return jQuery.hotkeys.specialKeys[event.which] ||
-              String.fromCharCode(event.which).toLowerCase();
-        }
-
+        
         $(document).on("keydown", function (event) {
             keydown[keyName(event)] = true;
+            Game.handleKeydown(keydown);
         });
 
         $(document).on("keyup", function (event) {
