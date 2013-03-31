@@ -153,6 +153,7 @@
     <Content Include="js\game.js" />
     <Content Include="js\game2.js" />
     <Content Include="js\game\CodeNinja.js" />
+    <Content Include="js\game\ContentManager.js" />
     <Content Include="js\vendor\easeljs-0.6.0.js" />
     <Content Include="js\vendor\jquery-1.9.1.js" />
     <Content Include="js\vendor\jquery.hotkeys.js" />
