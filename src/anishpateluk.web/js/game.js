@@ -91,9 +91,6 @@
               cbounds,
               collision = null,
               cc = 0;
-            //if (direction == "x") {
-            //    bounds.width = 10;
-            //}
 
             // for each collideable object we will calculate the
             // bounding-rectangle and then check for an intersection
