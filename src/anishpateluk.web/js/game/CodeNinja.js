@@ -128,5 +128,9 @@ CodeNinja.prototype.tick = function() {
     var self = this;
 
     // gravity
-    self.velocity.y += 1;
+    //self.velocity.y += 1;
+    self.velocity.y = 0;
+
+    self.x += self.velocity.x;
+    self.y += self.velocity.y;
 }
