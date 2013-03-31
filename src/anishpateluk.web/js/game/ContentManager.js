@@ -28,6 +28,6 @@ function GameContentManager(callback) {
 
         self.PlatformImage.onload = assetLoaded;
         self.PlatformImage.onerror = assetFailed;
-        self.PlatformImage.src = "/GameAssets/images/mario_platform.png";
+        self.PlatformImage.src = "/GameAssets/images/platform.png";
     };
 }
