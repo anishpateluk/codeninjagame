@@ -63,23 +63,22 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
 };
 
 CodeNinja.prototype.playAnimation = function (animation) {
-    var canPlayAnimation = this.canPlayAnimation;
-    var canMove = this.canMove;
-   
-    if (canPlayAnimation && animation != this.currentAnimation) {
-        this.gotoAndStop(this.currentAnimation);
-        this.currentAnimation = animation;
+    var self = this;
+    
+    if (self.canPlayAnimation && animation != self.currentAnimation) {
+        self.gotoAndStop(self.currentAnimation);
+        self.currentAnimation = animation;
         
         // can current animation be interupted?
         var interuptable = animation.indexOf("idle") != -1 ? true : animation.indexOf("run") != -1 ? true : false;
         
         if (!interuptable) {
-            canPlayAnimation = false;
-            canMove = !animation.indexOf("melee") != -1 || !animation.indexOf("range") != -1 || true;
-            this.addEventListener("animationend", function() {
-                this.removeAllEventListeners("animationend");
-                canPlayAnimation = true;
-                canMove = true;
+            self.canPlayAnimation = false;
+            self.canMove = !(animation.indexOf("melee") != -1 || animation.indexOf("range") != -1);
+            self.addEventListener("animationend", function () {
+                self.removeAllEventListeners("animationend");
+                self.canPlayAnimation = true;
+                self.canMove = true;
             });
         }
         
