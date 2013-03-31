@@ -53,7 +53,7 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     this.BitmapAnimation_initialize(spriteSheet);
 
     // properties
-    this.direction = 1; // 0 left, 1 right 
+    this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 25 };
     this.canPlayAnimation = true;
     this.canMove = true;
@@ -94,34 +94,34 @@ CodeNinja.prototype.reset = function (position) {
 };
 
 CodeNinja.prototype.idle = function () {
-    this.direction ? this.playAnimation("idle") : this.playAnimation("idle_h");
+    this.direction == 1 ? this.playAnimation("idle") : this.playAnimation("idle_h");
     this.velocity.x = 0;
 };
 
 CodeNinja.prototype.moveLeft = function () {
-    this.direction = 0;
-    if (this.canMove) this.velocity.x = 5;
+    this.direction = -1;
+    if (this.canMove) this.velocity.x = 5 * this.direction;
     this.playAnimation("run_h");
 };
 
 CodeNinja.prototype.moveRight = function () {
     this.direction = 1;
-    if (this.canMove) this.velocity.x = 5;
+    if (this.canMove) this.velocity.x = 5 * this.direction;
     this.playAnimation("run");
 };
 
 CodeNinja.prototype.jump = function () {
     if (!this.canJump) return;
     this.velocity.y = -15;
-    this.direction ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
 };
 
 CodeNinja.prototype.meleeAttack = function () {
-    this.direction ? this.playAnimation("meleeAttack") : this.playAnimation("meleeAttack_h");
+    this.direction == 1 ? this.playAnimation("meleeAttack") : this.playAnimation("meleeAttack_h");
 };
 
 CodeNinja.prototype.rangeAttack = function () {
-    this.direction ? this.playAnimation("rangeAttack") : this.playAnimation("rangeAttack_h");
+    this.direction == 1 ? this.playAnimation("rangeAttack") : this.playAnimation("rangeAttack_h");
 };
 
 CodeNinja.prototype.tick = function() {
