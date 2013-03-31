@@ -151,10 +151,10 @@
         if (Player.x > GameWidth * .3) {
             World.x = -Player.x + GameWidth * .3;
         }
-        if (Player.y > GameHeight * .7) {
-            World.y = -Player.y + GameHeight * .7;
-        } else if (Player.y < GameHeight * .3) {
-            World.y = -Player.y + GameHeight * .3;
+        if (Player.y > GameHeight * .6) {
+            World.y = -Player.y + GameHeight * .6;
+        } else if (Player.y < GameHeight * .6) {
+            World.y = -Player.y + GameHeight * .6;
         }
 
         // move background
