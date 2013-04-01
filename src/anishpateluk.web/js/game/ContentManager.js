@@ -5,9 +5,10 @@ function GameContentManager(callback) {
 
     self.CodeNinjaImage = new Image();
     self.PlatformImage = new Image();
+    self.CoffeeImage = new Image();
     
     var requestedAssets = 0;
-    var totalAssets = 2;
+    var totalAssets = 3;
 
     function assetLoaded() {
         ++requestedAssets;
@@ -29,5 +30,9 @@ function GameContentManager(callback) {
         self.PlatformImage.onload = assetLoaded;
         self.PlatformImage.onerror = assetFailed;
         self.PlatformImage.src = "/GameAssets/images/platform.png";
+        
+        self.CoffeeImage.onload = assetLoaded;
+        self.CoffeeImage.onerror = assetFailed;
+        self.CoffeeImage.src = "/GameAssets/images/coffee.png";
     };
 }
