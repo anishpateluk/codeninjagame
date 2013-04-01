@@ -87,8 +87,8 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, content
     this.velocity = { x: 0, y: 25 };
     this.canPlayAnimation = true;
     this.canMove = true;
-    this.doubleJump = false;
-    this.onGround = true;
+    this.doubleJump = true;
+    this.onGround = false;
     this.currentAnimation = "";
     this.reset(position);
 };
