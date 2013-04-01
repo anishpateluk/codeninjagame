@@ -72,7 +72,8 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     });
     createjs.SpriteSheetUtils.addFlippedFrames(spriteSheet, true, false, false);
     this.BitmapAnimation_initialize(spriteSheet);
-
+    this.snapToPixel = true;
+    
     // properties
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 25 };
@@ -181,7 +182,7 @@ CodeNinja.prototype.tick = function(game) {
 
     // gravity
     self.velocity.y += 1;
-    
+
     var bounds = ndgmr.getBounds(self);
     var velocity = self.velocity;
     var platforms = game.platforms;
