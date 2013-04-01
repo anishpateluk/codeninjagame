@@ -63,7 +63,7 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     this.reset(position);
 };
 
-CodeNinja.prototype.playAnimation = function (animation) {
+CodeNinja.prototype.playAnimation = function (animation, callback) {
     var self = this;
     
     if (self.canPlayAnimation && animation != self.currentAnimation) {
@@ -80,6 +80,7 @@ CodeNinja.prototype.playAnimation = function (animation) {
                 self.removeAllEventListeners("animationend");
                 self.canPlayAnimation = true;
                 self.canMove = true;
+                if (callback && typeof callback == "function") callback();
             });
         }
         
