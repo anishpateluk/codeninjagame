@@ -60,9 +60,10 @@ Projectile.prototype.tick = function (game) {
     var collision = null, i = 0;
 
     while (!collision && i < platforms.length) {
-        var cbounds = ndgmr.getBounds(platforms[i]);
-
-        collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
+        if (platforms[i].isVisible()) {
+            var cbounds = ndgmr.getBounds(platforms[i]);
+            collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
+        }
         i++;
     }
 
