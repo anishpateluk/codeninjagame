@@ -1,12 +1,12 @@
 ﻿
 // player character class
 
-function CodeNinja(playerImage, position) {
-    this.initialize(playerImage, position);
+function CodeNinja(playerImage, position, world, contentManager) {
+    this.initialize(playerImage, position, world, contentManager);
 }
 CodeNinja.prototype = new createjs.BitmapAnimation();
 CodeNinja.prototype.BitmapAnimation_initialize = CodeNinja.prototype.initialize;
-CodeNinja.prototype.initialize = function (playerImage, position) {
+CodeNinja.prototype.initialize = function (playerImage, position, world, contentManager) {
     var spriteSheet = new createjs.SpriteSheet({
         images: [playerImage],
 
@@ -75,6 +75,10 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     this.snapToPixel = true;
     
     // properties
+    this.world = world;
+    this.contentManager = contentManager;
+    this.coffeeThrown = [];
+    this.coffeeDestroyed = [];
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 25 };
     this.canPlayAnimation = true;
