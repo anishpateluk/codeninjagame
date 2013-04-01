@@ -60,14 +60,6 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
     this.doubleJump = false;
     this.onGround = true;
     this.currentAnimation = "";
-    this.getBounds = function() {
-        return {
-            x: this.x + 25,
-            y: this.y,
-            height: 100,
-            width: 100
-        };
-    };
     this.reset(position);
 };
 
