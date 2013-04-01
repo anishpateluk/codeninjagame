@@ -14,6 +14,7 @@
               "~/js/vendor/ndgmr.collision.js",
               "~/js/game/ContentManager.js",
               "~/js/game/CodeNinja.js",
+              "~/js/game/Projectile.js",
               "~/js/game/Game.js"));
 
           BundleTable.EnableOptimizations = true;
