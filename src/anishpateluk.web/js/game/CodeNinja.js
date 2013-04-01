@@ -64,8 +64,12 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, content
                 next: "idle"
             },
             rangeAttack: {
-                frames: [45, 46, 47, 48, 49, 50],
-                frequency: 5,
+                frames: [45, 45, 46, 47, 48],
+                frequency: 5
+            },
+            rangeAttackEnd: {
+                frames: [49, 49, 50],
+                frequency: 4,
                 next: "idle"
             }
         }
@@ -177,8 +181,25 @@ CodeNinja.prototype.meleeAttack = function () {
     this.direction == 1 ? this.playAnimation("meleeAttack") : this.playAnimation("meleeAttack_h");
 };
 
+CodeNinja.prototype.createCoffee = function () {
+    var self = this;
+    var coffee = new Projectile(self.contentManager.CoffeeImage, { x: self.x + (60 * self.direction), y: self.y - 20 }, self);
+    coffee.direction = self.direction;
+    coffee.velocity.y = -10;
+    coffee.velocity.x = 15 * self.direction;
+    return coffee;
+};
+
 CodeNinja.prototype.rangeAttack = function () {
-    this.direction == 1 ? this.playAnimation("rangeAttack") : this.playAnimation("rangeAttack_h");
+    var self = this;
+    var coffee = self.createCoffee();
+    var throwCoffee = function() {
+        self.coffeeThrown.push(coffee);
+        coffee.spin();
+        self.world.addChild(coffee);
+        self.direction == 1 ? self.playAnimation("rangeAttackEnd") : self.playAnimation("rangeAttackEnd_h");
+    };
+    self.direction == 1 ? self.playAnimation("rangeAttack", throwCoffee) : self.playAnimation("rangeAttack_h", throwCoffee);
 };
 
 CodeNinja.prototype.tick = function(game) {
@@ -220,5 +241,14 @@ CodeNinja.prototype.tick = function(game) {
         velocity.y = 0;
     }
 
-    if(self.x != self.velocity.x > 0) self.x += self.velocity.x;
+    if (self.x != self.velocity.x > 0) self.x += self.velocity.x;
+    
+    // coffee
+    for (var n in self.coffeeDestroyed) {
+        self.world.removeChild(self.coffeeDestroyed[n]);
+    }
+    
+    for (var n in self.coffeeThrown) {
+        self.coffeeThrown[n].tick(game);
+    }
 }
