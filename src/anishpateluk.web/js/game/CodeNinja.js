@@ -28,9 +28,30 @@ CodeNinja.prototype.initialize = function (playerImage, position) {
                 frequency: 4,
                 next: "run"
             },
-            jump: {
-                frames: [30, 30, 31, 31, 32, 32],
-                frequency: 6
+            jumpLaunching: {
+                frames: [29],
+                frequency: 5
+            },
+            jumpRising: {
+                frames: [30],
+                frequency: 1
+            },
+            jumpPeak: {
+                frames: [31, 31],
+                frequency: 3
+            },
+            jumpFalling: {
+                frames: [32],
+                frequency: 1
+            },
+            jumpLanding: {
+                frames: [33, 34],
+                frequency: 5,
+                next: "idle"
+            },
+            doubleJump: {
+                frames: [31, 31],
+                frequency: 3
             },
             hit: {
                 frames: [36, 35, 36],
@@ -113,17 +134,38 @@ CodeNinja.prototype.moveRight = function () {
 };
 
 CodeNinja.prototype.jump = function () {
-    if (this.onGround) {
-        this.velocity.y = -15;
-        this.onGround = false;
-        this.doubleJump = true;
-        this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    var self = this;
+    if (self.onGround) {
+        var jump = function () {
+            self.velocity.y = -16;
+            self.onGround = false;
+            self.doubleJump = true;
+        };
+        self.direction == 1 ? self.playAnimation("jumpLaunching", jump) : self.playAnimation("jumpLaunching_h", jump);
     } 
-    else if (this.doubleJump) {
-        this.velocity.y = -15;
-        this.doubleJump = false;
-        this.direction == 1 ? this.playAnimation("jump") : this.playAnimation("jump_h");
+    else if (self.doubleJump) {
+        var dJump = function() {
+            self.velocity.y = -16;
+            self.doubleJump = false;
+        };
+        self.direction == 1 ? self.playAnimation("doubleJump", dJump) : self.playAnimation("doubleJump_h", dJump);
     }
+};
+
+CodeNinja.prototype.jumpRising = function() {
+    this.direction == 1 ? this.playAnimation("jumpRising") : this.playAnimation("jumpRising_h");
+};
+
+CodeNinja.prototype.jumpPeak = function () {
+    this.direction == 1 ? this.playAnimation("jumpPeak") : this.playAnimation("jumpPeak_h");
+};
+
+CodeNinja.prototype.jumpFalling = function () {
+    this.direction == 1 ? this.playAnimation("jumpFalling") : this.playAnimation("jumpFalling_h");
+};
+
+CodeNinja.prototype.jumpLanding = function () {
+    this.direction == 1 ? this.playAnimation("jumpLanding") : this.playAnimation("jumpLanding_h");
 };
 
 CodeNinja.prototype.meleeAttack = function () {
@@ -154,12 +196,20 @@ CodeNinja.prototype.tick = function(game) {
 
     if (!collision) {
         self.y += velocity.y;
-        if (self.onGround) {
-            self.onGround = false;
-        }
+
+        if (velocity.y < 0) self.jumpRising(); // rising
+        else if (velocity.y > 0) self.jumpFalling(); // falling
+        else self.jumpPeak(); // peak
+        
+        if (self.onGround) self.onGround = false;
+        
     } else {
         self.y += velocity.y - collision.height;
         if (velocity.y > 0) {
+            
+            // if not on ground yet then land
+            if (!self.onGround) self.jumpLanding();
+            
             self.onGround = true;
         }
         velocity.y = 0;
