@@ -142,6 +142,7 @@
     <Content Include="css\game.min.css">
       <DependentUpon>game.less</DependentUpon>
     </Content>
+    <Content Include="GameAssets\images\coffee.png" />
     <Content Include="GameAssets\images\platform.png" />
     <Content Include="Global.asax" />
     <Content Include="GameAssets\images\cn_master.png" />
