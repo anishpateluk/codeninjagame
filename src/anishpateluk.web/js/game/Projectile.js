@@ -29,7 +29,7 @@ Projectile.prototype.initialize = function (projectileImage, position, player) {
     createjs.SpriteSheetUtils.addFlippedFrames(spriteSheet, true, false, false);
     this.BitmapAnimation_initialize(spriteSheet);
     this.snapToPixel = true;
-
+	
     // properties
     this.player = player;
     this.direction = 1; // -1 left, 1 right 
@@ -46,6 +46,18 @@ Projectile.prototype.spin = function() {
 Projectile.prototype.reset = function (position) {
     this.x = position.x;
     this.y = position.y;
+};
+
+Projectile.prototype.bounds = function () {
+	var self = this;
+	return {
+		height: 50,
+		width: 50,
+		regX: 25,
+		regY: 25,
+		x: self.x -25,
+		y: self.y - 25
+	};
 };
 
 Projectile.prototype.tick = function (game) {
