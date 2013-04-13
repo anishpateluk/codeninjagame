@@ -17,7 +17,7 @@
         x = Math.round(x);
         y = Math.round(y);
 
-        var platform = new createjs.Bitmap(contentManager.PlatformImage);
+	    var platform = new Platform(contentManager.PlatformImage);//new createjs.Bitmap(contentManager.PlatformImage);
         platform.x = x;
         platform.y = y;
         platform.snapToPixel = true;
