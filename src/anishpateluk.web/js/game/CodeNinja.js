@@ -65,11 +65,11 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, content
             },
             rangeAttack: {
                 frames: [45, 45, 46, 47, 48],
-                frequency: 5
+                frequency: 3
             },
             rangeAttackEnd: {
                 frames: [49, 49, 50],
-                frequency: 4,
+                frequency: 3,
                 next: "idle"
             }
         }
