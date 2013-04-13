@@ -11,8 +11,8 @@
               "~/js/vendor/jquery-1.9.1.js",
               "~/js/vendor/jquery.hotkeys.js",
               "~/js/vendor/easeljs-0.6.0.js",
-              "~/js/vendor/ndgmr.collision.js",
               "~/js/game/ContentManager.js",
+              "~/js/game/Platform.js",
               "~/js/game/CodeNinja.js",
               "~/js/game/Projectile.js",
               "~/js/game/Game.js"));

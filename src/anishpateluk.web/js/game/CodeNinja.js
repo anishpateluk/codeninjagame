@@ -227,14 +227,14 @@ CodeNinja.prototype.tick = function(game) {
     // gravity
     self.velocity.y += 1;
 
-    var bounds = ndgmr.getBounds(self);
+	var bounds = self.bounds();
     var velocity = self.velocity;
     var platforms = game.platforms;
     var collision = null, i = 0;
     
     while (!collision && i < platforms.length) {
         if (platforms[i].isVisible()) {
-            var cbounds = ndgmr.getBounds(platforms[i]);
+			var cbounds = platforms[i].bounds();
             collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
         }
         i++;
