@@ -10,7 +10,7 @@
     Game = {};
     Game.utils = {};
 
-    Game.platforms = [];
+    Game.platforms = window.platforms = [];
 
     Game.addPlatform = function(x, y) {
         var contentManager = ContentManager;
@@ -76,11 +76,11 @@
         var contentManager = ContentManager;
         
         // set up stage
-        var stage = Stage = new createjs.Stage(canvas);
+        var stage = Stage = window.stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
         
         // set up world
-        var world = World = new createjs.Container();
+        var world = World = window.world = new createjs.Container();
         stage.addChild(world);
 
         // add platforms
@@ -95,7 +95,7 @@
         }
 
         // set up player
-        var player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 400 }, world, contentManager);
+        var player = window.player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 400 }, world, contentManager);
 
         // add player to world
         world.addChild(player);
