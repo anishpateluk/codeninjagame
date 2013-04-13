@@ -59,39 +59,7 @@
         canvas.width = window.innerWidth;
         canvas.height = GameHeight;
     };
-
-    // game utils
-    Game.utils.createBgGrid = function (numX, numY, thickness) {
-        var thickFactor = thickness || 0.01;
-        var grid = new createjs.Container();
-        grid.snapToPixel = true;
-        var gw = GameWidth / numX;
-        var gh = GameHeight / numY;
-        var verticalLine = new createjs.Graphics();
-        verticalLine.beginFill(createjs.Graphics.getRGB(8, 250, 93));
-        verticalLine.drawRect(0, 0, gw * thickFactor, gh * (numY + 2));
-        var vs;
-        for (var c = -1; c < numX + 1; c++) {
-            vs = new createjs.Shape(verticalLine);
-            vs.snapToPixel = true;
-            vs.x = c * gw;
-            vs.y = -gh;
-            grid.addChild(vs);
-        }
-        var horizontalLine = new createjs.Graphics();
-        horizontalLine.beginFill(createjs.Graphics.getRGB(8, 250, 93));
-        horizontalLine.drawRect(0, 0, gw * (numX + 1), gh * thickFactor);
-        var hs;
-        for (c = -1; c < numY + 1; c++) {
-            hs = new createjs.Shape(horizontalLine);
-            hs.snapToPixel = true;
-            hs.x = 0;
-            hs.y = c * gh;
-            grid.addChild(hs);
-        }
-        return grid;
-    };
-    
+	
     // game initialization
     Game.init = function () {
         var contentManager = ContentManager = new GameContentManager(function() {
@@ -111,12 +79,6 @@
         var stage = Stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
         
-        // add background
-        var background = Background = Game.utils.createBgGrid(GRID_H, GRID_V);
-        stage.addChild(background);
-        var parallax = Parallax = Game.utils.createBgGrid(GRID_H, GRID_V);
-        stage.addChild(parallax);
-
         // set up world
         var world = World = new createjs.Container();
         stage.addChild(world);
@@ -137,7 +99,6 @@
 
         // add player to world
         world.addChild(player);
-        
 
         // easeljs boilerplate
         createjs.Ticker.addListener(window);
@@ -161,12 +122,6 @@
         if (Player.y > GameHeight * 3) {
             Player.reset({ x: 450, y: GameHeight - 150 });
         }
-
-        // move background
-        Background.x = (World.x * .45) % (GameWidth / GRID_H);
-        Background.y = (World.y * .45) % (GameHeight / GRID_V);
-        Parallax.x = (World.x * .50) % (GameWidth / GRID_H);
-        Parallax.y = (World.y * .50) % (GameHeight / GRID_V);
     };
     
     window.tick = function () {
