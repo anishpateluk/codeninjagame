@@ -126,9 +126,9 @@
     
     window.tick = function () {
 
-        if (keydown.left) Player.moveLeft();
-        if (keydown.right) Player.moveRight();
-        if (!keydown.left && !keydown.right) Player.idle();
+    	if (!keydown.left && !keydown.right) Player.idle(); 
+        else if (keydown.right) Player.moveRight();
+        else if (keydown.left) Player.moveLeft();
 
         Player.tick(Game);
 
