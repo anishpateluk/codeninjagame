@@ -202,6 +202,25 @@ CodeNinja.prototype.rangeAttack = function () {
     self.direction == 1 ? self.playAnimation("rangeAttack", throwCoffee) : self.playAnimation("rangeAttack_h", throwCoffee);
 };
 
+CodeNinja.prototype.bdims = {
+	centreToFront: 25,
+	centreToBack: 25,
+	centreToTop: 50,
+	centreToBottom: 50
+};
+
+CodeNinja.prototype.bounds = function () {
+	var self = this;
+	return {
+		regX: self.regX,
+		regY: self.regY,
+		height: self.bdims.centreToTop + self.bdims.centreToTop,
+		width: self.bdims.centreToBack + self.bdims.centreToFront,
+		y: self.y - self.bdims.centreToTop,
+		x: self.x - (self.direction == 1 ? self.bdims.centreToBack : self.bdims.centreToFront)
+	};
+};
+
 CodeNinja.prototype.tick = function(game) {
     var self = this;
 
