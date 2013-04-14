@@ -83,7 +83,6 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, game, c
 	this.game = game;
     this.contentManager = contentManager;
     this.coffeeThrown = [];
-    this.coffeeDestroyed = [];
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 25 };
     this.canPlayAnimation = true;
@@ -224,7 +223,8 @@ CodeNinja.prototype.bounds = function () {
 
 CodeNinja.prototype.tick = function() {
     var self = this;
-	var game = self.game;
+    var game = self.game;
+	var world = self.world;
 
     // gravity
     self.velocity.y += 1;
@@ -266,11 +266,15 @@ CodeNinja.prototype.tick = function() {
     if (self.x != self.velocity.x > 0) self.x += self.velocity.x;
     
     // coffee
-    for (var n in self.coffeeDestroyed) {
-        self.world.removeChild(self.coffeeDestroyed[n]);
-    }
-    
-    for (var n in self.coffeeThrown) {
-        self.coffeeThrown[n].tick();
-    }
+	var len = self.coffeeThrown.length;
+	for (var n = 0; n < len; n++) {
+		var coffee = self.coffeeThrown[n];
+		if (!coffee.active) {
+			self.coffeeThrown.splice(n, 1);
+			world.removeChild(coffee);
+			delete coffee;
+			continue;
+		}
+		coffee.tick();
+	}
 }

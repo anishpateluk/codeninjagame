@@ -33,7 +33,8 @@ Projectile.prototype.initialize = function (projectileImage, position, player, w
     // properties
     this.player = player;
     this.world = world;
-	this.game = game;
+    this.game = game;
+	this.active = true;
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 0 };
     this.reset(position);
@@ -87,9 +88,8 @@ Projectile.prototype.tick = function () {
     } else {
         self.y += velocity.y - collision.height;
         self.velocity.y = 0;
-        delete self;
+        self.active = false;
 		return;
-		//self.player.coffeeDestroyed.push(self);
 	}
 
     self.x += self.velocity.x;
