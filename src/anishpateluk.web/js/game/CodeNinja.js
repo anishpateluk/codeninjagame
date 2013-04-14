@@ -222,7 +222,7 @@ CodeNinja.prototype.bounds = function () {
 	};
 };
 
-CodeNinja.prototype.tick = function() {
+CodeNinja.prototype.update = function() {
 	var self = this;
 	
     var game = self.game;
@@ -276,6 +276,6 @@ CodeNinja.prototype.tick = function() {
 			delete coffee;
 			continue;
 		}
-		coffee.tick();
+		coffee.update();
 	}
 }

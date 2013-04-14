@@ -113,7 +113,7 @@
         createjs.Ticker.setFPS(FramesPerSecond);
     };
 
-    Game.tick = function () {
+    Game.update = function () {
     	var game = Game;
     	var player = Player;
 	    var world = World;
@@ -127,7 +127,7 @@
         } else if (player.y < game.height * .6) {
             world.y = -player.y + game.height * .6;
         }
-        
+
 	    game.utils.updateDrawVisibility();
         
         // reset player if fallen off edge
@@ -150,11 +150,11 @@
         else if (keydown.right) player.moveRight();
         else if (keydown.left) player.moveLeft();
 
-        player.tick();
+    	game.update();
+		
+    	player.update();
 
-        game.tick();
-        
-        stage.update();
+    	stage.update();
 
 	    displayFPS();
     };

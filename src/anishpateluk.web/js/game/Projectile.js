@@ -64,7 +64,7 @@ Projectile.prototype.bounds = function () {
 	};
 };
 
-Projectile.prototype.tick = function () {
+Projectile.prototype.update = function () {
 	var self = this;
 
 	var game = self.game;
