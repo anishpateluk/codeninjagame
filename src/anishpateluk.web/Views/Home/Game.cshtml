@@ -23,24 +23,25 @@
 </head>
     <body>
         
-        <div id="game-wrapper">
-            <canvas id="game-canvas"></canvas>
-            @if (isMobile)
-            {
-                <div id="mobile-controls">
-                    <button id="left-key"></button>
-                    <button id="right-key"></button>
-                    <button id="up-key"></button>
-                    <button id="space-key"></button>
-                </div>
-            }
-            else
-            {
-                <div id="info">
-                    <small>left and right arrow keys to move, up arrow key to jump, q to melee attack and w to range attack</small>
-                </div>
-            }
-        </div>
+		<span><span id="fps"></span> FPS</span>
+		<div id="game-wrapper">
+			<canvas id="game-canvas"></canvas>
+			@if (isMobile)
+			{
+				<div id="mobile-controls">
+					<button id="left-key"></button>
+					<button id="right-key"></button>
+					<button id="up-key"></button>
+					<button id="space-key"></button>
+				</div>
+			}
+			else
+			{
+				<div id="info">
+					<small>left and right arrow keys to move, up arrow key to jump, q to melee attack and w to range attack</small>
+				</div>
+			}
+		</div>
 
         @if (Html.IsDebug())
         {

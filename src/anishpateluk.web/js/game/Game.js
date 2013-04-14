@@ -1,4 +1,4 @@
-
+﻿
 (function (window, $, undefined) {
     //globals
     var FramesPerSecond = 30;
@@ -108,6 +108,11 @@
         }
     };
     
+	function displayFPS() {
+		var fps = document.getElementById("fps");
+		fps.innerHTML = createjs.Ticker.getMeasuredFPS();
+	}
+    
     window.tick = function () {
     	var player = Player;
     	var game = Game;
@@ -122,6 +127,8 @@
         game.tick();
         
         stage.update();
+
+	    displayFPS();
     };
     
     function keyName(event) {
