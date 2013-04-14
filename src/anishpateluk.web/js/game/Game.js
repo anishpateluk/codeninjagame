@@ -1,7 +1,7 @@
 ﻿
 (function (window, $, undefined) {
     //globals
-    var FramesPerSecond = 30;
+    var FramesPerSecond = 60;
     var Game, ContentManager, Canvas, World, Stage, Player, Level;
     // game
     Game = {

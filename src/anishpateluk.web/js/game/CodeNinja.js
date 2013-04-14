@@ -85,7 +85,7 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, game, l
     this.contentManager = contentManager;
     this.coffeeThrown = [];
     this.direction = 1; // -1 left, 1 right 
-    this.velocity = { x: 0, y: 25 };
+    this.velocity = { x: 0, y: 0 };
     this.canPlayAnimation = true;
     this.canMove = true;
     this.doubleJump = true;
@@ -147,7 +147,7 @@ CodeNinja.prototype.jump = function () {
     var self = this;
     if (self.onGround) {
         var jump = function () {
-            self.velocity.y = -16;
+            self.velocity.y = -18;
             self.onGround = false;
             self.doubleJump = true;
         };
@@ -155,7 +155,7 @@ CodeNinja.prototype.jump = function () {
     } 
     else if (self.doubleJump) {
         var dJump = function() {
-            self.velocity.y = -16;
+            self.velocity.y = -18;
             self.doubleJump = false;
         };
         self.direction == 1 ? self.playAnimation("doubleJump", dJump) : self.playAnimation("doubleJump_h", dJump);
@@ -206,8 +206,8 @@ CodeNinja.prototype.rangeAttack = function () {
 CodeNinja.prototype.bdims = {
 	centreToFront: 25,
 	centreToBack: 25,
-	centreToTop: 50,
-	centreToBottom: 50
+	centreToTop: 40,
+	centreToBottom: 55
 };
 
 CodeNinja.prototype.bounds = function () {
@@ -217,31 +217,57 @@ CodeNinja.prototype.bounds = function () {
 		regY: self.regY,
 		height: self.bdims.centreToTop + self.bdims.centreToTop,
 		width: self.bdims.centreToBack + self.bdims.centreToFront,
-		y: self.y - self.bdims.centreToTop,
+		y: self.y - self.bdims.centreToTop + 5,
 		x: self.x - (self.direction == 1 ? self.bdims.centreToBack : self.bdims.centreToFront)
 	};
+};
+
+CodeNinja.prototype.calculateCollision = function(direction) {
+	if (!direction) throw new Error("must supply direction");
+
+	var self = this;
+	var velocity = self.velocity;
+	var bounds = self.bounds();
+	var game = self.game;
+	var level = self.level;
+	var platforms = level.platforms;
+	var collision = null;
+	var len = platforms.length;
+	var i = 0;
+	
+	if (direction == "y") {
+		while (!collision && i < len) {
+			if (platforms[i].isVisible()) {
+				var cbounds = platforms[i].bounds();
+				collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
+			}
+			i++;
+		}
+		return collision;
+	} else {
+		while (!collision && i < len) {
+			if (platforms[i].isVisible()) {
+				var cbounds = platforms[i].bounds();
+				collision = game.calculateIntersection(bounds, cbounds, velocity.x, 0);
+			}
+			i++;
+		}
+		return collision;
+	}
 };
 
 CodeNinja.prototype.update = function() {
 	var self = this;
 	
-    var game = self.game;
     var world = self.world;
-    var bounds = self.bounds();
     var velocity = self.velocity;
-    var platforms = self.level.platforms;
-    var collision = null, i = 0;
+	var collision = null;
 
     // gravity
     self.velocity.y += 1;
-    
-    while (!collision && i < platforms.length) {
-        if (platforms[i].isVisible()) {
-			var cbounds = platforms[i].bounds();
-            collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
-        }
-        i++;
-    }
+
+	// vertical movement and collision
+	collision = self.calculateCollision("y");
 
     if (!collision) {
         self.y += velocity.y;
@@ -253,20 +279,34 @@ CodeNinja.prototype.update = function() {
         if (self.onGround) self.onGround = false;
         
     } else {
-        self.y += velocity.y - collision.height;
-        if (velocity.y > 0) {
+	    (collision.rect2.y + collision.rect2.height / 2) < collision.rect1.y
+    		? self.y += velocity.y + collision.height
+    		: self.y += velocity.y - collision.height;
+
+	    if (velocity.y >= 0) {
             
             // if not on ground yet then land
-            if (!self.onGround) self.jumpLanding();
-            
-            self.onGround = true;
+            if (!self.onGround) {
+            	self.onGround = true;
+            	self.jumpLanding();
+			}
         }
         velocity.y = 0;
     }
 
-    if (self.x != self.velocity.x > 0) self.x += self.velocity.x;
-    
-    // coffee
+	// horizontal movement and collision
+    collision = self.calculateCollision("x");
+	
+	if (!collision) {
+		if(self.x + velocity.x > 25) self.x += velocity.x;
+	} else {
+		(collision.rect2.x + collision.rect2.width / 2) < collision.rect1.x
+			? self.x += velocity.x + collision.width
+			: self.x += velocity.x - collision.width;
+	}
+	
+
+    // projectiles
 	var len = self.coffeeThrown.length;
 	for (var n = 0; n < len; n++) {
 		var coffee = self.coffeeThrown[n];

@@ -52,10 +52,6 @@ GameLevel.prototype.build = function() {
 	for (var i = 600; i < width; i += 300) {
 		level.addPlatform(i, game.height - 100);
 	}
-
-	level.addPlatform(0, game.height - 150);
-	level.addPlatform(0, game.height - 200);
-	level.addPlatform(0, game.height - 250);
 	
 	for (var i = 900; i < width; i += 300) {
 		level.addPlatform(i, game.height - 150);
@@ -80,5 +76,12 @@ GameLevel.prototype.build = function() {
 	for (var i = 2400; i < width; i += 300) {
 		level.addPlatform(i, game.height - 400);
 	}
+	
+	level.addPlatform(0, game.height - 200);
+	level.addPlatform(0, game.height - 150);
+	level.addPlatform(0, game.height - 100);
+	level.addPlatform(0, game.height - 50);
+	
+	level.addPlatform(600, game.height - 300);
 
 }
