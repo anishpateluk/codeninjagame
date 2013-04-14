@@ -10,8 +10,34 @@
     };
     Game.utils = {};
 
+	Game.utils.updateDrawVisibility = function() {
+		var game = Game;
+		var world = World;
+
+		var horizontal_threshold = 300;
+		var vertical_threshold = 300;
+
+		var minX = -world.x - horizontal_threshold;
+		var minY = -world.y - vertical_threshold;
+		var maxX = -world.x + game.width + horizontal_threshold;
+		var maxY = -world.y + game.height + vertical_threshold;
+
+		var drawables = world.children;
+		var len = drawables.length;
+		
+		for (var i = 0; i < len; i++) {
+			var drawable = drawables[i];
+			
+			if (drawable.x < minX || drawable.x > maxX) {
+				drawable.visible = false;
+			} else if (drawable.y < minY || drawable.y > maxY) {
+				drawable.visible = false;
+			} else {
+				drawable.visible = true;
+			}
+		}
+	};
 	
-    	
     Game.calculateIntersection = function(rect1, rect2, x, y) {
         // first we have to calculate the
         // center of each rectangle and half of
@@ -102,12 +128,14 @@
             world.y = -player.y + game.height * .6;
         }
         
+	    game.utils.updateDrawVisibility();
+        
         // reset player if fallen off edge
         if (player.y > game.height * 3) {
         	player.reset({ x: 450, y: game.height - 400 });
         }
     };
-    
+	
 	function displayFPS() {
 		var fps = document.getElementById("fps");
 		fps.innerHTML = createjs.Ticker.getMeasuredFPS();
