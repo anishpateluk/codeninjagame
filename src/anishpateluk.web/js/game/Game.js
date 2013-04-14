@@ -1,4 +1,4 @@
-﻿
+
 (function (window, $, undefined) {
     //globals
     var FramesPerSecond = 30;
@@ -11,8 +11,7 @@
     Game.utils = {};
 
 	
-    Game.platforms = window.platforms = [];
-	
+    	
     Game.calculateIntersection = function(rect1, rect2, x, y) {
         // first we have to calculate the
         // center of each rectangle and half of
@@ -50,7 +49,7 @@
     // game initialization
     Game.init = function () {
         var contentManager = ContentManager = new GameContentManager(function() {
-            var canvas = Canvas = document.getElementById("game-canvas");
+            var canvas = Canvas = window.canvas = document.getElementById("game-canvas");
             Game.start(canvas);
         });
         contentManager.loadAssets();
