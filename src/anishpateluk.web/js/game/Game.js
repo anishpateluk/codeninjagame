@@ -2,30 +2,17 @@
 (function (window, $, undefined) {
     //globals
     var FramesPerSecond = 30;
-    var Game, ContentManager, Background, Parallax, Canvas, World, Stage, Player, GameWidth;
-    var GRID_H = 12, GRID_V = 3;
-    var GameHeight = 300;
-    
+    var Game, ContentManager, Canvas, World, Stage, Player, Level;
     // game
-    Game = {};
+    Game = {
+    	width: 300,
+    	height: 300
+    };
     Game.utils = {};
 
+	
     Game.platforms = window.platforms = [];
-
-    Game.addPlatform = function(x, y) {
-        var contentManager = ContentManager;
-        x = Math.round(x);
-        y = Math.round(y);
-
-	    var platform = new Platform(contentManager.PlatformImage);//new createjs.Bitmap(contentManager.PlatformImage);
-        platform.x = x;
-        platform.y = y;
-        platform.snapToPixel = true;
-
-        Game.platforms.push(platform);
-        World.addChild(platform);
-    };
-
+	
     Game.calculateIntersection = function(rect1, rect2, x, y) {
         // first we have to calculate the
         // center of each rectangle and half of
@@ -57,7 +44,7 @@
 
     Game.resizeCanvas = function (canvas) {
         canvas.width = window.innerWidth;
-        canvas.height = GameHeight;
+        canvas.height = Game.height;
     };
 	
     // game initialization
@@ -70,33 +57,27 @@
     };
     
     Game.start = function (canvas) {
-        Game.resizeCanvas(canvas);
-        GameHeight = canvas.height;
-        GameWidth = canvas.width;
-        var contentManager = ContentManager;
 	    var game = Game;
-        
-        // set up stage
-        var stage = Stage = window.stage = new createjs.Stage(canvas);
+	    var contentManager = ContentManager;
+	    
+	    game.resizeCanvas(canvas);
+	    game.height = canvas.height;
+	    game.width = canvas.width;
+
+    	// set up stage
+	    var stage = Stage = window.stage = new createjs.Stage(canvas);
         stage.snapToPixel = true;
         
         // set up world
         var world = World = window.world = new createjs.Container();
         stage.addChild(world);
 
-        // add platforms
-        for (var i = 0; i < GameWidth * 1.5; i += 300) {
-            Game.addPlatform(i, GameHeight);
-        }
-        for (var i = 300; i < GameWidth * 1.5; i += 300) {
-            Game.addPlatform(i * 2, GameHeight - 150);
-        }
-        for (var i = 450; i < GameWidth * 1.5; i += 300) {
-            Game.addPlatform(i * 2, GameHeight - 300);
-        }
+    	// set up level
+        var level = Level = window.level = new GameLevel(game, world, contentManager);
+	    level.build();
 
-        // set up player
-        var player = window.player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 400 }, world, game, contentManager);
+		// set up player
+        var player = window.player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: game.height - 400 }, world, game, level, contentManager);
 
         // add player to world
         world.addChild(player);
@@ -108,34 +89,40 @@
     };
 
     Game.tick = function () {
-        
+    	var game = Game;
+    	var player = Player;
+	    var world = World;
+
         // move world with player
-        if (Player.x > GameWidth * .3) {
-            World.x = -Player.x + GameWidth * .3;
+        if (player.x > game.width * .3) {
+            world.x = -player.x + game.width * .3;
         }
-        if (Player.y > GameHeight * .6) {
-            World.y = -Player.y + GameHeight * .6;
-        } else if (Player.y < GameHeight * .6) {
-            World.y = -Player.y + GameHeight * .6;
+        if (player.y > game.height * .6) {
+            world.y = -player.y + game.height * .6;
+        } else if (player.y < game.height * .6) {
+            world.y = -player.y + game.height * .6;
         }
         
         // reset player if fallen off edge
-        if (Player.y > GameHeight * 3) {
-        	Player.reset({ x: 450, y: GameHeight - 400 });
+        if (player.y > game.height * 3) {
+        	player.reset({ x: 450, y: game.height - 400 });
         }
     };
     
     window.tick = function () {
+    	var player = Player;
+    	var game = Game;
+	    var stage = Stage;
 
-    	if (!keydown.left && !keydown.right) Player.idle(); 
-        else if (keydown.right) Player.moveRight();
-        else if (keydown.left) Player.moveLeft();
+    	if (!keydown.left && !keydown.right) player.idle(); 
+        else if (keydown.right) player.moveRight();
+        else if (keydown.left) player.moveLeft();
 
-        Player.tick();
+        player.tick();
 
-        Game.tick();
+        game.tick();
         
-        Stage.update();
+        stage.update();
     };
     
     function keyName(event) {

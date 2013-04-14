@@ -1,12 +1,12 @@
 ﻿
-function Projectile(projectileImage, position, player, world, game) {
-    this.initialize(projectileImage, position, player, world, game);
+function Projectile(projectileImage, position, player, world, game, level) {
+    this.initialize(projectileImage, position, player, world, game, level);
 }
 
 Projectile.prototype = new createjs.BitmapAnimation();
 Projectile.prototype.BitmapAnimation_initialize = Projectile.prototype.initialize;
 
-Projectile.prototype.initialize = function (projectileImage, position, player, world, game) {
+Projectile.prototype.initialize = function (projectileImage, position, player, world, game, level) {
     var spriteSheet = new createjs.SpriteSheet({
         images: [projectileImage],
 
@@ -34,6 +34,7 @@ Projectile.prototype.initialize = function (projectileImage, position, player, w
     this.player = player;
     this.world = world;
     this.game = game;
+	this.level = level;
 	this.active = true;
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 0 };
@@ -65,15 +66,15 @@ Projectile.prototype.bounds = function () {
 
 Projectile.prototype.tick = function () {
 	var self = this;
+
 	var game = self.game;
-    
-    // gravity
-    self.velocity.y += 1;
-    
     var bounds = self.bounds();
     var velocity = self.velocity;
-    var platforms = game.platforms;
+    var platforms = level.platforms;
     var collision = null, i = 0;
+
+	// gravity
+    self.velocity.y += 1;
 
     while (!collision && i < platforms.length) {
         if (platforms[i].isVisible()) {

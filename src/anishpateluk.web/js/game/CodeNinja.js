@@ -1,12 +1,12 @@
 ﻿
 // player character class
 
-function CodeNinja(playerImage, position, world, game, contentManager) {
-    this.initialize(playerImage, position, world, game, contentManager);
+function CodeNinja(playerImage, position, world, game, level, contentManager) {
+    this.initialize(playerImage, position, world, game, level, contentManager);
 }
 CodeNinja.prototype = new createjs.BitmapAnimation();
 CodeNinja.prototype.BitmapAnimation_initialize = CodeNinja.prototype.initialize;
-CodeNinja.prototype.initialize = function (playerImage, position, world, game, contentManager) {
+CodeNinja.prototype.initialize = function (playerImage, position, world, game, level, contentManager) {
     var spriteSheet = new createjs.SpriteSheet({
         images: [playerImage],
 
@@ -80,7 +80,8 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, game, c
     
     // properties
     this.world = world;
-	this.game = game;
+    this.game = game;
+	this.level = level;
     this.contentManager = contentManager;
     this.coffeeThrown = [];
     this.direction = 1; // -1 left, 1 right 
@@ -183,7 +184,7 @@ CodeNinja.prototype.meleeAttack = function () {
 
 CodeNinja.prototype.createCoffee = function () {
     var self = this;
-    var coffee = new Projectile(self.contentManager.CoffeeImage, { x: self.x + (60 * self.direction), y: self.y - 20 }, self, self.world, self.game);
+    var coffee = new Projectile(self.contentManager.CoffeeImage, { x: self.x + (60 * self.direction), y: self.y - 20 }, self, self.world, self.game, self.level);
     coffee.direction = self.direction;
     coffee.velocity.y = -10;
     coffee.velocity.x = 15 * self.direction;
@@ -222,17 +223,17 @@ CodeNinja.prototype.bounds = function () {
 };
 
 CodeNinja.prototype.tick = function() {
-    var self = this;
+	var self = this;
+	
     var game = self.game;
-	var world = self.world;
+    var world = self.world;
+    var bounds = self.bounds();
+    var velocity = self.velocity;
+    var platforms = self.level.platforms;
+    var collision = null, i = 0;
 
     // gravity
     self.velocity.y += 1;
-
-	var bounds = self.bounds();
-    var velocity = self.velocity;
-    var platforms = game.platforms;
-    var collision = null, i = 0;
     
     while (!collision && i < platforms.length) {
         if (platforms[i].isVisible()) {
