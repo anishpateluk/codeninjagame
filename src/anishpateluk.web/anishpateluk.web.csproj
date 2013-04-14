@@ -157,6 +157,7 @@
     <Content Include="js\game\CodeNinja.js" />
     <Content Include="js\game\ContentManager.js" />
     <Content Include="js\game\Game.js" />
+    <Content Include="js\game\Level.js" />
     <Content Include="js\game\Platform.js" />
     <Content Include="js\game\Projectile.js" />
     <Content Include="js\vendor\easeljs-0.6.0.js" />
