@@ -1,12 +1,12 @@
 ﻿
 // player character class
 
-function CodeNinja(playerImage, position, world, contentManager) {
-    this.initialize(playerImage, position, world, contentManager);
+function CodeNinja(playerImage, position, world, game, contentManager) {
+    this.initialize(playerImage, position, world, game, contentManager);
 }
 CodeNinja.prototype = new createjs.BitmapAnimation();
 CodeNinja.prototype.BitmapAnimation_initialize = CodeNinja.prototype.initialize;
-CodeNinja.prototype.initialize = function (playerImage, position, world, contentManager) {
+CodeNinja.prototype.initialize = function (playerImage, position, world, game, contentManager) {
     var spriteSheet = new createjs.SpriteSheet({
         images: [playerImage],
 
@@ -80,6 +80,7 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, content
     
     // properties
     this.world = world;
+	this.game = game;
     this.contentManager = contentManager;
     this.coffeeThrown = [];
     this.coffeeDestroyed = [];
@@ -183,7 +184,7 @@ CodeNinja.prototype.meleeAttack = function () {
 
 CodeNinja.prototype.createCoffee = function () {
     var self = this;
-    var coffee = new Projectile(self.contentManager.CoffeeImage, { x: self.x + (60 * self.direction), y: self.y - 20 }, self);
+    var coffee = new Projectile(self.contentManager.CoffeeImage, { x: self.x + (60 * self.direction), y: self.y - 20 }, self, self.world, self.game);
     coffee.direction = self.direction;
     coffee.velocity.y = -10;
     coffee.velocity.x = 15 * self.direction;
@@ -221,8 +222,9 @@ CodeNinja.prototype.bounds = function () {
 	};
 };
 
-CodeNinja.prototype.tick = function(game) {
+CodeNinja.prototype.tick = function() {
     var self = this;
+	var game = self.game;
 
     // gravity
     self.velocity.y += 1;
@@ -269,6 +271,6 @@ CodeNinja.prototype.tick = function(game) {
     }
     
     for (var n in self.coffeeThrown) {
-        self.coffeeThrown[n].tick(game);
+        self.coffeeThrown[n].tick();
     }
 }

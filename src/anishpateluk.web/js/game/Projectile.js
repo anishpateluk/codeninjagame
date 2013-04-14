@@ -1,12 +1,12 @@
 ﻿
-function Projectile(projectileImage, position, player) {
-    this.initialize(projectileImage, position, player);
+function Projectile(projectileImage, position, player, world, game) {
+    this.initialize(projectileImage, position, player, world, game);
 }
 
 Projectile.prototype = new createjs.BitmapAnimation();
 Projectile.prototype.BitmapAnimation_initialize = Projectile.prototype.initialize;
 
-Projectile.prototype.initialize = function (projectileImage, position, player) {
+Projectile.prototype.initialize = function (projectileImage, position, player, world, game) {
     var spriteSheet = new createjs.SpriteSheet({
         images: [projectileImage],
 
@@ -32,6 +32,8 @@ Projectile.prototype.initialize = function (projectileImage, position, player) {
 	
     // properties
     this.player = player;
+    this.world = world;
+	this.game = game;
     this.direction = 1; // -1 left, 1 right 
     this.velocity = { x: 0, y: 0 };
     this.reset(position);
@@ -60,8 +62,9 @@ Projectile.prototype.bounds = function () {
 	};
 };
 
-Projectile.prototype.tick = function (game) {
-    var self = this;
+Projectile.prototype.tick = function () {
+	var self = this;
+	var game = self.game;
     
     // gravity
     self.velocity.y += 1;
@@ -84,8 +87,10 @@ Projectile.prototype.tick = function (game) {
     } else {
         self.y += velocity.y - collision.height;
         self.velocity.y = 0;
-        self.player.coffeeDestroyed.push(self);
-    }
+        delete self;
+		return;
+		//self.player.coffeeDestroyed.push(self);
+	}
 
     self.x += self.velocity.x;
 };

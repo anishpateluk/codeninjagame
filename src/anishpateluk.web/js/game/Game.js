@@ -74,6 +74,7 @@
         GameHeight = canvas.height;
         GameWidth = canvas.width;
         var contentManager = ContentManager;
+	    var game = Game;
         
         // set up stage
         var stage = Stage = window.stage = new createjs.Stage(canvas);
@@ -95,7 +96,7 @@
         }
 
         // set up player
-        var player = window.player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 400 }, world, contentManager);
+        var player = window.player = Player = new CodeNinja(contentManager.CodeNinjaImage, { x: 450, y: GameHeight - 400 }, world, game, contentManager);
 
         // add player to world
         world.addChild(player);
@@ -120,7 +121,7 @@
         
         // reset player if fallen off edge
         if (Player.y > GameHeight * 3) {
-            Player.reset({ x: 450, y: GameHeight - 150 });
+        	Player.reset({ x: 450, y: GameHeight - 400 });
         }
     };
     
@@ -130,7 +131,7 @@
         else if (keydown.right) Player.moveRight();
         else if (keydown.left) Player.moveLeft();
 
-        Player.tick(Game);
+        Player.tick();
 
         Game.tick();
         
