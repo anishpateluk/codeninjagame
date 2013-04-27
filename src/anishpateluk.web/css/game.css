@@ -8,6 +8,8 @@
   margin: 5% auto 0px;
 }
 #game-canvas {
+  display: block;
+  margin: 0 auto 0;
   background: linear-gradient(bottom, #282828 40%, #515b61 70%);
   background: -o-linear-gradient(bottom, #282828 40%, #515b61 70%);
   background: -moz-linear-gradient(bottom, #282828 40%, #515b61 70%);

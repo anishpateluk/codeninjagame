@@ -5,7 +5,7 @@
     var Game, ContentManager, Canvas, World, Stage, Player, Level;
     // game
     Game = {
-    	width: 300,
+    	width: 900,
     	height: 300
     };
     Game.utils = {};
@@ -68,7 +68,7 @@
     };
 
     Game.resizeCanvas = function (canvas) {
-        canvas.width = window.innerWidth;
+        canvas.width = Game.width;
         canvas.height = Game.height;
     };
 	
