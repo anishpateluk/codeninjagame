@@ -21,7 +21,7 @@ Projectile.prototype.initialize = function (projectileImage, position, player, w
         animations: {
             spin: {
                 frames: [0, 1, 2],
-                frequency: 4,
+                frequency: 10,
                 next: "spin"
             }
         }

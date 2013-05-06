@@ -21,24 +21,24 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, game, l
         animations: {
             idle: {
                 frames: [0, 1, 2, 3, 4, 5, 6, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20, 15, 16, 17, 18, 19, 20],
-                frequency: 5
+                frequency: 12
             },
             run: {
                 frames: [21, 22, 23, 24, 25, 26, 27, 28],
-                frequency: 4,
+                frequency: 6,
                 next: "run"
             },
             jumpLaunching: {
                 frames: [29],
-                frequency: 5
+                frequency: 11
             },
             jumpRising: {
                 frames: [30],
                 frequency: 1
             },
             jumpPeak: {
-                frames: [31, 31],
-                frequency: 3
+                frames: [31],
+                frequency: 8
             },
             jumpFalling: {
                 frames: [32],
@@ -46,30 +46,30 @@ CodeNinja.prototype.initialize = function (playerImage, position, world, game, l
             },
             jumpLanding: {
                 frames: [33, 34],
-                frequency: 5,
+                frequency: 6,
                 next: "idle"
             },
             doubleJump: {
                 frames: [31, 31],
-                frequency: 3
+                frequency: 5
             },
             hit: {
-                frames: [36, 35, 36],
-                frequency: 3,
+                frames: [36, 35, 36, 35],
+                frequency: 8,
                 next: "idle"
             },
             meleeAttack: {
                 frames: [37, 38, 39, 40, 41, 42, 43, 44],
-                frequency: 4,
+                frequency: 6,
                 next: "idle"
             },
             rangeAttack: {
                 frames: [45, 45, 46, 47, 48],
-                frequency: 3
+                frequency: 5
             },
             rangeAttackEnd: {
                 frames: [49, 49, 50],
-                frequency: 3,
+                frequency: 5,
                 next: "idle"
             }
         }
