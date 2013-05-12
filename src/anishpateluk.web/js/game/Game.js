@@ -144,7 +144,8 @@
     window.tick = function () {
     	var player = Player;
     	var game = Game;
-	    var stage = Stage;
+    	var stage = Stage;
+        var level = Level;
 
     	if (!keydown.left && !keydown.right) player.idle(); 
         else if (keydown.right) player.moveRight();
@@ -153,6 +154,8 @@
     	game.update();
 		
     	player.update();
+
+        level.update();
 
     	stage.update();
 

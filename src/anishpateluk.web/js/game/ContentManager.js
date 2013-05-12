@@ -6,9 +6,10 @@ function GameContentManager(callback) {
     self.CodeNinjaImage = new Image();
     self.PlatformImage = new Image();
     self.CoffeeImage = new Image();
+    self.EnemyImage = new Image();
     
     var requestedAssets = 0;
-    var totalAssets = 3;
+    var totalAssets = 4;
 
     function assetLoaded() {
         ++requestedAssets;
@@ -34,5 +35,9 @@ function GameContentManager(callback) {
         self.CoffeeImage.onload = assetLoaded;
         self.CoffeeImage.onerror = assetFailed;
         self.CoffeeImage.src = "/GameAssets/images/coffee.png";
+        
+        self.EnemyImage.onload = assetLoaded;
+        self.EnemyImage.onerror = assetFailed;
+        self.EnemyImage.src = "/GameAssets/images/enemy_ninja_master.png";
     };
 }

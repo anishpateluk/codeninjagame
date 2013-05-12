@@ -33,6 +33,29 @@ GameLevel.prototype.addPlatform = function (x, y) {
 	world.addChild(platform);
 };
 
+GameLevel.prototype.addEnemy = function (x, y) {
+    var self = this;
+    var contentManager = self.contentManager;
+    var world = self.world;
+    var game = self.game;
+    var enemies = self.enemies;
+
+    x = Math.round(x);
+    y = Math.round(y);
+
+    var enemy = new Enemy(contentManager.EnemyImage, { x: x, y: y }, world, game, level);
+    enemies.push(enemy);
+    
+    world.addChild(enemy);
+};
+
+GameLevel.prototype.update = function() {
+    var self = this;
+    for (var i = 0, len = self.enemies.length; i < len; i++) {
+        self.enemies[i].update();
+    }
+};
+
 GameLevel.prototype.build = function() {
 	var self = this;
 	var level = self;
@@ -83,5 +106,6 @@ GameLevel.prototype.build = function() {
 	level.addPlatform(0, game.height - 50);
 	
 	level.addPlatform(600, game.height - 300);
+    level.addEnemy(650, game.height - 460);
 
 }
