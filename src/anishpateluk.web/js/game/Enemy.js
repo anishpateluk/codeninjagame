@@ -71,7 +71,7 @@ Enemy.prototype.reset = function (position) {
     this.playAnimation("idle");
 };
 
-Enemy.prototype.idle = function () {
+Enemy.prototype.idle = function() {
     this.direction == 1 ? this.playAnimation("idle") : this.playAnimation("idle_h");
     this.velocity.x = 0;
 };
@@ -83,12 +83,8 @@ Enemy.prototype.move = function() {
     }
 };
 
-Enemy.prototype.die = function () {
-    if (this.direction == 1) {
-        this.playAnimation("die");
-    } else {
-        this.playAnimation("die_h");
-    } 
+Enemy.prototype.die = function() {
+    this.direction == 1 ? this.playAnimation("die") : this.playAnimation("die_h");
 };
 
 Enemy.prototype.bdims = {
