@@ -56,12 +56,15 @@ Enemy.prototype.playAnimation = function(animation, callback) {
 
     self.addEventListener("animationend", function() {
         self.removeAllEventListeners("animationend");
-        self.canPlayAnimation = true;
         self.canMove = true;
+        self.currentAnimation = "";
         if (callback && typeof callback == "function") callback();
     });
-
-    this.gotoAndPlay(animation);
+    
+    if (self.currentAnimation != animation) {
+        self.currentAnimation = animation;
+        self.gotoAndPlay(animation);
+    }
 };
 
 Enemy.prototype.reset = function (position) {
@@ -77,10 +80,8 @@ Enemy.prototype.idle = function() {
 };
 
 Enemy.prototype.move = function() {
-    if (this.canMove) {
-        this.velocity.x = 2 * this.direction;
-        this.direction == 1 ? this.playAnimation("walk") : this.playAnimation("walk_h");
-    }
+    this.velocity.x = 2 * this.direction;
+    this.direction == 1 ? this.playAnimation("walk") : this.playAnimation("walk_h");
 };
 
 Enemy.prototype.die = function() {
@@ -164,6 +165,9 @@ Enemy.prototype.update = function () {
 
     // gravity
     self.velocity.y += 1;
+
+    // move
+    self.move();
 
     // vertical movement and collision
     collision = self.calculateCollision("y", platforms);
