@@ -115,39 +115,53 @@ Enemy.prototype.bounds = function () {
     };
 };
 
-Enemy.prototype.calculateCollision = function (direction) {
-    if (!direction) throw new Error("must supply direction");
+Enemy.prototype.calculateCollision = function (direction, platforms) {
+    if (!direction || !platforms) throw new Error("must supply direction and platforms");
 
     var self = this;
     var velocity = self.velocity;
     var bounds = self.bounds();
     var game = self.game;
-    var level = self.level;
-    var platforms = level.platforms;
     var collision = null;
     var len = platforms.length;
     var i = 0;
 
     if (direction == "y") {
         while (!collision && i < len) {
-            if (platforms[i].isVisible()) {
-                var cbounds = platforms[i].bounds();
-                collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
-            }
+            var cbounds = platforms[i].bounds();
+            collision = game.calculateIntersection(bounds, cbounds, 0, velocity.y);
             i++;
         }
         return collision;
     } else {
         while (!collision && i < len) {
-            if (platforms[i].isVisible()) {
-                var cbounds = platforms[i].bounds();
-                collision = game.calculateIntersection(bounds, cbounds, velocity.x, 0);
-            }
+            var cbounds = platforms[i].bounds();
+            collision = game.calculateIntersection(bounds, cbounds, velocity.x, 0);
             i++;
         }
         return collision;
     }
 };
+
+Enemy.prototype.getPlatformsInCloseProximity = function () {
+    var self = this;
+    var level = self.level;
+    var platforms = level.platforms;
+    var bounds = { left: self.x - 300, right: self.x + 300, up: self.y - 300, down: self.y + 300 };
+    var platformsInProximity = [];
+    
+    for (var i = 0, len = platforms.length; i < len; i++) {
+        var platformCenter = { x: platforms[i].x + platforms[i].width / 2, y: platforms[i].y + platforms[i].height / 2 };
+        
+        if ((platformCenter.x > bounds.left && platformCenter.x < bounds.right)
+            || (platformCenter.y > bounds.up && platformCenter.y < bounds.down)) {
+            platformsInProximity.push(platforms[i]);
+        }
+    }
+
+    return platformsInProximity;
+};
+
 
 Enemy.prototype.update = function () {
     var self = this;
@@ -155,12 +169,13 @@ Enemy.prototype.update = function () {
     var world = self.world;
     var velocity = self.velocity;
     var collision = null;
+    var platforms = self.getPlatformsInCloseProximity();
 
     // gravity
     self.velocity.y += 1;
 
     // vertical movement and collision
-    collision = self.calculateCollision("y");
+    collision = self.calculateCollision("y", platforms);
 
     if (!collision) {
         self.y += velocity.y;
@@ -183,7 +198,7 @@ Enemy.prototype.update = function () {
     }
 
     // horizontal movement and collision
-    collision = self.calculateCollision("x");
+    collision = self.calculateCollision("x", platforms);
 
     if (!collision) {
         if (self.x + velocity.x > 25) self.x += velocity.x;
