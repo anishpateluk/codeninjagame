@@ -76,16 +76,11 @@ Enemy.prototype.idle = function () {
     this.velocity.x = 0;
 };
 
-Enemy.prototype.moveLeft = function () {
-    this.direction = -1;
-    if (this.canMove) this.velocity.x = 2 * this.direction;
-    this.playAnimation("walk_h");
-};
-
-Enemy.prototype.moveRight = function () {
-    this.direction = 1;
-    if (this.canMove) this.velocity.x = 2 * this.direction;
-    this.playAnimation("walk");
+Enemy.prototype.move = function() {
+    if (this.canMove) {
+        this.velocity.x = 2 * this.direction;
+        this.direction == 1 ? this.playAnimation("walk") : this.playAnimation("walk_h");
+    }
 };
 
 Enemy.prototype.die = function () {
