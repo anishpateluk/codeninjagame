@@ -152,8 +152,6 @@
     <Content Include="img\glyphs\left_arrow.png" />
     <Content Include="img\glyphs\right_arrow.png" />
     <Content Include="img\glyphs\axe.png" />
-    <Content Include="js\game.js" />
-    <Content Include="js\game2.js" />
     <Content Include="js\game\CodeNinja.js" />
     <Content Include="js\game\ContentManager.js" />
     <Content Include="js\game\Enemy.js" />
