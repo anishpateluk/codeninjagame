@@ -154,6 +154,114 @@ Enemy.prototype.getPlatformsInCloseProximity = function () {
     return platformsInProximity;
 };
 
+Enemy.prototype.getCurrentPlatform = function(platforms) {
+    if (!platforms) throw new Error("must supply platforms");
+    var self = this;
+
+    var bounds = self.bounds();
+    var selfBottomEdge = bounds.y + bounds.height;
+    var selfLeftEdge = bounds.x;
+    var selfRightEdge = bounds.x + bounds.width;
+
+    for (var i = 0, len = platforms.length; i < len; i++) {
+        var platform = platforms[i];
+        var platformTopEdge = platform.y;
+        var platformLeftEdge = platform.x;
+        var platformRightEdge = platform.x + platform.width;
+
+        if (platformTopEdge == selfBottomEdge
+            && platformLeftEdge <= selfLeftEdge
+            && platformRightEdge >= selfRightEdge) {
+            return platform;
+        }
+    }
+
+    return null;
+};
+
+Enemy.prototype.pathBlocked = function(platform, platforms) {
+    if (!platform || !platforms) throw new Error("must supply platforms and current platforms");
+    var self = this;
+    var bounds = self.bounds();
+    var adjacentPlatforms = [];
+    var selfLeftEdge = bounds.x;
+    var selfRightEdge = bounds.x + bounds.width;
+    var selfTopEdge = bounds.y;
+    var selfBottomEdge = bounds.y + bounds.height; 
+    var platformRightEdge = platform.x + platform.width;
+    var platformLeftEdge = platform.x;
+    var hackOffset = 10;
+    
+
+    // not blocked if not at either edge of the platform
+    if (selfRightEdge < (platformRightEdge - hackOffset) && selfLeftEdge > (platformLeftEdge + hackOffset)) return false;
+    
+    var i, len, p, platformBottomEdge;
+
+    // if facing right
+    if (this.direction == 1) {
+        
+            // check for adjacent platforms
+            for (i = 0, len = platforms.length; i < len; i++) {
+                p = platforms[i];
+                if (platformRightEdge != p.x) {
+                    continue;
+                }
+                adjacentPlatforms.push(p);
+            }
+
+    // else facing left
+    } else {
+        
+        // check for adjacent platforms
+        for (i = 0, len = platforms.length; i < len; i++) {
+            p = platforms[i];
+            if (platformLeftEdge != (p.x + p.width)) {
+                continue;
+            }
+            adjacentPlatforms.push(p);
+        }
+    }
+    
+    // if there are no adjacent platforms then path is blocked as ninja can fall off edge
+    if (!adjacentPlatforms.length) {
+        return true;
+    }
+
+    // check if adjacent platforms block path
+    for (i = 0, len = adjacentPlatforms.length; i < len; i++) {
+        p = adjacentPlatforms[i];
+        platformBottomEdge = p.y + p.height;
+
+        // if adjacent platform is blocking 
+        if (platformBottomEdge <= selfBottomEdge || platformBottomEdge >= selfTopEdge) {
+            return true;
+        }
+    }
+
+    // nothing blocking path
+    return false;
+};
+
+Enemy.prototype.behave = function() {
+    var self = this;
+
+    if (!self.onGround) return;
+
+    var world = self.world;
+    var velocity = self.velocity;
+    var collision = null;
+    var platforms = self.getPlatformsInCloseProximity();
+    var platform = self.getCurrentPlatform(platforms);
+    var pathBlocked = self.pathBlocked(platform, platforms);
+    
+    if (pathBlocked) {
+        self.direction = self.direction * -1;
+    }
+
+    self.move();
+
+};
 
 Enemy.prototype.update = function () {
     var self = this;
@@ -162,12 +270,12 @@ Enemy.prototype.update = function () {
     var velocity = self.velocity;
     var collision = null;
     var platforms = self.getPlatformsInCloseProximity();
+    var currentPlatform = self.getCurrentPlatform(platforms);
 
     // gravity
     self.velocity.y += 1;
 
-    // move
-    self.move();
+    if(self.onGround) self.behave();
 
     // vertical movement and collision
     collision = self.calculateCollision("y", platforms);
