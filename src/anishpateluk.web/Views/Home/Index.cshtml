@@ -1,5 +1,11 @@
-﻿@{
+﻿@using System.Web.Optimization
+@using anishpateluk.web.Helpers
+
+@model bool
+
+@{
     Layout = null;
+    var isMobile = Model;
 }
 
 <!DOCTYPE html>
@@ -7,10 +13,54 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>anishpatel.net</title>
+    <title>anishpatel.net - boho fighter</title>
 
+    <link rel="stylesheet" type="text/css" href="/css/game.min.css" />
+
+    <script type="text/javascript">
+        window.isMobile = @(isMobile ? "true" : "false");
+    </script>
 </head>
-    <body>
-        
-    </body>
+<body>
+
+    <span style="margin-left: 50px"><span id="fps"></span> FPS</span>
+    <div id="game-wrapper">
+        <canvas id="game-canvas"></canvas>
+        @if (isMobile)
+        {
+            <div id="mobile-controls">
+                <button id="left-key"></button>
+                <button id="right-key"></button>
+                <button id="up-key"></button>
+                <button id="space-key"></button>
+            </div>
+        }
+        else
+        {
+            <div id="info">
+                <small>left and right arrow keys to move, up arrow key to jump, q to melee attack and w to range attack</small>
+            </div>
+        }
+    </div>
+
+    @if (Html.IsDebug())
+    {
+        <script src="~/js/vendor/jquery-1.9.1.js"></script>
+        <script src="~/js/vendor/jquery.hotkeys.js"></script>
+        <script src="~/js/vendor/easeljs-0.6.0.js"></script>
+        <script src="~/js/game/ContentManager.js"></script>
+        <script src="~/js/game/Level.js"></script>
+        <script src="~/js/game/Enemy.js"></script>
+        <script src="~/js/game/Platform.js"></script>
+        <script src="~/js/game/Projectile.js"></script>
+        <script src="~/js/game/CodeNinja.js"></script>
+        <script src="~/js/game/Game.js"></script>
+    }
+    else
+    {
+        @Scripts.Render("~/scripts/game")
+        @*<script type="text/javascript" src="~/scripts/game"></script>*@
+    }
+
+</body>
 </html>
